@@ -48,7 +48,7 @@ URL 부분에 `https://github.com/wlonep/basicprj-c06.git`을 붙여넣고 프�
 Pull하지 않고 개발을 하면 Merge 시 conflict(한 파일을 각기 다른 사람이 수정하여 충돌이 일어나는 것)가 발생할 수 있습니다.
 
 ### 개발 후
-![img.png](img.png)
+![image](https://github.com/user-attachments/assets/7bc06bee-7915-4e70-95ab-269487e21eb3)
 
 파란색 표시한 부분이 main이 아닌지 확인하고, main이라면 branch 이름(아무거나 상관없음)을 입력한 뒤 Push하세요.
 
