@@ -43,7 +43,7 @@ URL 부분에 `https://github.com/wlonep/basicprj-c06.git`을 붙여넣고 프�
 ### 개발 시작 전
 ![image](https://github.com/user-attachments/assets/232d488c-20cb-4c5c-951c-f4de0622eb5e)
 
-개발 시작 전, **반드시** `Git > Pull`을 클릭해 프로젝트를 Pull해 주세요. (다른 사람이 변경한 코드를 받아와서 내 로컬 빌드에 )
+개발 시작 전, **반드시** `Git > Pull`을 클릭해 프로젝트를 Pull해 주세요.
 
 Pull하지 않고 개발을 하면 Merge 시 conflict(한 파일을 각기 다른 사람이 수정하여 충돌이 일어나는 것)가 발생할 수 있습니다.
 
