@@ -62,12 +62,12 @@ wb = openpyxl.load_workbook("train_data.xlsx")
 
 # 경부선
 sheet = wb["경부선"]
-upward_sheet = sheet['B11':'V82']
-upward_header = sheet['D8':'U8']
-upward_dir = '../src/train/upward'
-downward_sheet = sheet['X11':'AR86']
-downward_header = sheet['Z8':'AQ8']
-downward_dir = '../src/train/downward'
+downward_sheet = sheet['B11':'V82']
+downward_header = sheet['D8':'U8']
+downward_dir = '../src/train/upward'
+upward_sheet = sheet['X11':'AR86']
+upward_header = sheet['Z8':'AQ8']
+upward_dir = '../src/train/downward'
 
 if not os.path.exists(upward_dir):
     os.makedirs(upward_dir)
