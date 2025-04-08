@@ -21,8 +21,8 @@ class Station:
             with open(f"{self.__STATION_FILES}/{sf}", 'r', encoding='UTF-8') as file:
                 lines = file.readlines()
             for line in lines:
-                temp = line.strip('\n').split('=')
-                self.__station_data[sf.replace(".txt", "")][temp[0]] = int(temp[1])
+                key, value = line.strip().split('=', 1)
+                self.__station_data[sf.replace(".txt", "")][key + "역"] = int(value)
 
     def get_stations(self, route: str) -> dict:
         """

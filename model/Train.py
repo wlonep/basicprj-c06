@@ -4,8 +4,9 @@ import os
 class Train:
     def __init__(self, way: str):
         self.way = way
-        self.__train_data = []
+        self.train_data = {}
         self.__load_train_data(f"src/train/{self.way}")
+        self.book_limit = 20    # 예약 가능한 좌석 수
 
     def __load_train_data(self, directory: str):
         """
@@ -17,29 +18,72 @@ class Train:
         """
         if not os.path.isdir(directory):
             raise FileNotFoundError("train files are missing.")
+        data = {}
         for sf in os.listdir(directory):
-            data = {}
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
                 lines = file.readlines()
+            tid = int(lines[0].strip().split('=')[1])
+            data[tid] = {}
             for line in lines:
                 if '=' in line:
                     key, value = line.strip().split('=', 1)
-                    if key == "BOOKED" and value == "":
-                        data[key] = []
+                    if key == "BOOKED":
+                        if value == "":
+                            data[tid][key] = []
+                        else:
+                            data[tid][key] = value.split(",")
+                    elif key == "STATION":
+                        data[tid][key] = [s + "역" for s in value.split(",")]
                     else:
                         try:
-                            data[key] = int(value)
+                            data[tid][key] = int(value)
                         except ValueError:
-                            data[key] = value.split(",")
-            self.__train_data.append(data)
+                            data[tid][key] = value.split(",")
+        # noinspection PyTypeChecker
+        self.train_data = dict(sorted(data.items()))
 
-    def get_all_train_data(self) -> dict:
+    def get_train_data(self, depart: str, arrive: str) -> list:
         """
-        기차 목록을 fetch하는 함수입니다.
-        :param way: 기차 방향(string: upward, downward)
+        출발지, 도착지까지의 경로가 존재하는 예매 가능한
+        모든 기차 목록을 출력하는 함수입니다.
+        :param depart: 출발지(string)
+        :param arrive: 도착지(string)
         :return:
         """
-        try:
-            return self.__train_data
-        except KeyError:
-            return {}
+        train_list = []
+        for train in self.train_data:
+            td = self.train_data[train]
+            if depart in td["STATION"] and arrive in td["STATION"] \
+                    and len(td["BOOKED"]) < self.book_limit:
+                train_list.append(td)
+        return train_list
+
+    def book_seat(self, train_id: int, seat_num: int) -> bool:
+        """
+        기차 파일에 예약된 좌석을 저장하는 함수입니다.
+        :param train_id: 기차 아이디(int)
+        :param seat_num: 예약할 좌석 번호(int)
+        :return:
+        """
+        if seat_num < 1 or seat_num > self.book_limit:
+            raise ValueError("Invalid seat number.")
+        if str(seat_num) in self.train_data[train_id]["BOOKED"]:
+            return False
+        self.train_data[train_id]["BOOKED"].append(seat_num)
+        return self.update_data(train_id)
+
+    def update_data(self, train_id: int) -> bool:
+        """
+        기차 데이터 파일을 업데이트하는 함수입니다.
+        :param train_id: 기차 아이디(int)
+        :return:
+        """
+        train = self.train_data[train_id]
+        file_path = f"src/train/{self.way}/KTX-{train_id}.txt"
+        with open(file_path, 'w', encoding='UTF-8') as file:
+            file.write(f"TRAIN_ID={train_id}\n")
+            for key, value in train.items():
+                if isinstance(value, list):
+                    value = ','.join(map(str, value))
+                file.write(f"{key}={value}\n")
+        return True

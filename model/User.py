@@ -2,11 +2,20 @@ import os
 
 
 class User:
-    def __init__(self):
+    def __init__(self, user_id: str = None):
+        """
+        User 클래스 선언 시 user_id를 인자로 넣었다면
+        해당 user_id를 가진 파일 하나만 불러오기 때문에 user_ids는 빈 배열이 됩니다.
+        user_ids를 사용하는 load_user_data와 is_user_exist 함수 모두
+        user_id가 지정되지 않은 로그인이나 회원가입 시에만 사용되고,
+        User 클래스는 예약 시에도 사용되기 때문에 이와 같이 설계하였습니다.
+        """
         self.__USER_FILES = "src/user"
         self.user_ids = []
         self.user_data = {}
-        self.__load_user_data()
+        if not user_id:
+            self.__load_user_data()
+        self.user_id = user_id
 
     def __load_user_data(self):
         """
@@ -34,6 +43,7 @@ class User:
         """
         회원가입 함수입니다. 본 함수 사용 전 **반드시** is_user_exist() 함수를
         먼저 사용해 중복 계정이 있는지를 확인해야 합니다.
+        사용하지 않는다면 아이디를 중복으로 입력했을 때 사용자 데이터 파일이 덮어씌워집니다.
         :param uid: 입력받은 사용자 아이디(string)
         :param password: 입력받은 비밀번호(string)
         :return: 회원가입이 정상적으로 처리되었다면 True를 반환합니다.
@@ -60,7 +70,28 @@ class User:
         if password != correct:
             return False
         for line in lines[1:]:
+            # temp[0] = train_id인데, 이 값이 정수형이 아닌 경우 오류 발생함
             temp = line.split('-')
-
+            self.user_data[int(temp[0])] = {
+                "depart": temp[1],
+                "arrive": temp[2],
+            }
         return True
 
+    def add_booking(self, train_id: int, depart: str, arrive: str) -> bool:
+        """
+        사용자 계정에 예매 정보를 추가하는 함수입니다.
+        모든 예매는 로그인 후 이루어진다고 가정하여 User 클래스 선언 시
+        user_id를 인자로 받은 경우에만 호출이 가능합니다.
+        :param train_id: 기차 번호(int)
+        :param depart: 출발지(string)
+        :param arrive: 도착지(string)
+        :return: 예약이 정상적으로 처리되었다면 True를 반환합니다.
+        """
+        self.user_data[train_id] = {
+            "depart": depart,
+            "arrive": arrive,
+        }
+        with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
+            file.write(f"\n{train_id}-{depart}-{arrive}")
+        return True
