@@ -5,6 +5,7 @@ class User:
     def __init__(self):
         self.__USER_FILES = "src/user"
         self.user_ids = []
+        self.user_data = {}
         self.__load_user_data()
 
     def __load_user_data(self):
@@ -58,4 +59,8 @@ class User:
         correct = lines[0].strip()
         if password != correct:
             return False
+        for line in lines[1:]:
+            temp = line.split('-')
+
         return True
+
