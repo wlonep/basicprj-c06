@@ -19,7 +19,6 @@ class User:
         else:
             self.__load_user_data()
 
-
     def __load_user_ids(self):
         """
         사용자 데이터 로드 함수입니다.
@@ -104,3 +103,13 @@ class User:
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
             file.write(f"\n{train_id}-{depart}-{arrive}")
         return True
+
+    def cancel_booked(self, cancel: int):
+        with open(f"{self.__USER_FILES}/{self.user_id}.txt", "w", encoding='UTF-8') as file:
+            data = self.user_data
+            password = data["password"]
+            file.write(f"{password}")
+            for key in data["booked_list"]:
+                if  key == cancel:
+                    continue
+                file.write(f"\n{key}-{data["booked_list"][key]["depart"]}-{data["booked_list"][key]["arrive"]}")
