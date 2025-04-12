@@ -13,11 +13,12 @@ class User:
         self.__USER_FILES = "src/user"
         self.user_ids = []
         self.user_data = {}
+        self.user_id = user_id
         if not user_id:
             self.__load_user_ids()
         else:
             self.__load_user_data()
-        self.user_id = user_id
+
 
     def __load_user_ids(self):
         """
