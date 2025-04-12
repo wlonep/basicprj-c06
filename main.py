@@ -1,4 +1,5 @@
 from core.dummy import Dummy
+from model.User import User
 
 """
 임의로 구현한 초기 화면입니다. 실제 초기 화면은 while문을 사용하여
@@ -14,4 +15,5 @@ if __name__ == '__main__':
 
     # 각 클래스 호출 예시입니다. 실제 구동 시에는 삭제해 주세요.
     if sel == "2":
-        Dummy.test()
+        user = User("test")
+        print(user.user_id)
