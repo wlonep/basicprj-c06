@@ -10,6 +10,26 @@ class Train:
             self.__load_train_data(f"src/train/{self.way}")
         self.book_limit = 20    # 예약 가능한 좌석 수
 
+    @staticmethod
+    def __add_data(lines: list) -> dict:
+        data = {}
+        for line in lines:
+            if '=' in line:
+                key, value = line.strip().split('=', 1)
+                if key == "BOOKED":
+                    if value == "":
+                        data[key] = []
+                    else:
+                        data[key] = value.split(",")
+                elif key == "STATION":
+                    data[key] = [s + "역" for s in value.split(",")]
+                else:
+                    try:
+                        data[key] = int(value)
+                    except ValueError:
+                        data[key] = value.split(",")
+        return data
+
     def __load_train_data(self, directory: str):
         """
         기차 데이터 로드 함수입니다.
@@ -25,22 +45,8 @@ class Train:
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
                 lines = file.readlines()
             tid = int(lines[0].strip().split('=')[1])
-            data[tid] = {}
-            for line in lines:
-                if '=' in line:
-                    key, value = line.strip().split('=', 1)
-                    if key == "BOOKED":
-                        if value == "":
-                            data[tid][key] = []
-                        else:
-                            data[tid][key] = value.split(",")
-                    elif key == "STATION":
-                        data[tid][key] = [s + "역" for s in value.split(",")]
-                    else:
-                        try:
-                            data[tid][key] = int(value)
-                        except ValueError:
-                            data[tid][key] = value.split(",")
+            data[tid] = self.__add_data(lines)
+
         # noinspection PyTypeChecker
         self.train_data = dict(sorted(data.items()))
 
@@ -90,16 +96,20 @@ class Train:
                 file.write(f"{key}={value}\n")
         return True
 
-    def get_trains(self):
+    def get_trains(self) -> list:
         result = []
         for train in self.train_ids:
             if train % 2 == 0:
                 for sf in os.listdir(f"src/train/upward"):
                     if sf == f"KTX-{train}.txt":
-                        result.append(train)
+                        with open(f"src/train/upward/{sf}", 'r', encoding='UTF-8') as file:
+                            lines = file.readlines()
+                        result.append(self.__add_data(lines))
             else:
                 for sf in os.listdir(f"src/train/downward"):
                     if sf == f"KTX-{train}.txt":
-                        result.append(train)
+                        with open(f"src/train/downward/{sf}", 'r', encoding='UTF-8') as file:
+                            lines = file.readlines()
+                        result.append(self.__add_data(lines))
         return result
 
