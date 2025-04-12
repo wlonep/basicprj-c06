@@ -1,6 +1,4 @@
-from model.Train import Train
-from model.Station import Station
-from model.User import User
+from core.dummy import Dummy
 
 """
 임의로 구현한 초기 화면입니다. 실제 초기 화면은 while문을 사용하여
@@ -16,26 +14,4 @@ if __name__ == '__main__':
 
     # 각 클래스 호출 예시입니다. 실제 구동 시에는 삭제해 주세요.
     if sel == "2":
-        user = User()
-        is_exist = user.is_user_exist("test")
-        if not is_exist:
-            register = user.register("test", "1234")
-            if register:
-                print("회원가입 성공")
-        else:
-            print("회원가입 실패(이미 존재하는 계정)")
-
-        stations = Station().get_stations("gyeongbu")   # 경부선 역 목록 받아오기
-        depart_station = "서울역"
-        arrive_station = "부산역"
-        weight = stations[depart_station] - stations[arrive_station]
-
-        if weight < 0:
-            train = Train("downward")
-            train_data = train.get_train_data(depart_station, arrive_station)
-            for td in train_data:
-                print(td["TRAIN_ID"])
-        elif weight > 0:
-            train = Train("upward")
-        else:
-            print("출발역과 도착역이 같습니다.")
+        Dummy.test()
