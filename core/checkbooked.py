@@ -1,21 +1,28 @@
 import re
-from model import User, Station, Train
+from model import User, Train
+
 
 class CheckBooked:
     def __init__(self, user_id: str):
         self.user = User(user_id)
 
-    def __get_info(self) -> dict: # 사용자의 모든 예약된 열차 데이터 반환
+    def __get_info(self) -> dict:  # 사용자의 모든 예약된 열차 데이터 반환
         train_ids = []
         user_data = self.user.user_data["booked_list"]
         for tid in user_data.keys():
             train_ids.append(tid)
         train_ids.sort()
-        train = Train(None, train_ids)
+        train = Train(train_ids=train_ids)
         booked_list = train.get_trains()  # 예약된 기차 정보
-        return {"train_ids":train_ids, "user_data":user_data, "train":train, "booked_list":booked_list}
+        return {
+            "train_ids": train_ids,
+            "user_data": user_data,
+            "train": train,
+            "booked_list": booked_list
+        }
 
-    def print_booked_info(self, info: dict, t_info: dict):
+    @staticmethod
+    def print_booked_info(info: dict, t_info: dict):
         tid = t_info["TRAIN_ID"]
 
         fee = t_info["FEE"]
@@ -46,11 +53,9 @@ class CheckBooked:
                 flag = True
             if st[:-1] == arrive:
                 print(st[:-1])
-                flag = False
                 break
             if flag:
                 print(st[:-1] + "-", end='')
-
 
     def print_booked_lists(self):
         info = self.__get_info()
@@ -60,7 +65,6 @@ class CheckBooked:
         for t_info in info["booked_list"]:
             self.print_booked_info(info, t_info)
             print("------------------------------")
-
 
     def cancel_booked(self):
         print("[예매 취소]")
@@ -74,11 +78,12 @@ class CheckBooked:
                 if int(cancel) not in info["train_ids"]:
                     print("\033[31m" + "*일치하는 예매 정보가 없습니다. 다시 입력해주세요." + "\033[0m")
                     continue
-                else: break
+                else:
+                    break
             else:
                 print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해주세요." + "\033[0m")
 
-        t_info={}
+        t_info = {}
         for t in info["booked_list"]:
             if t["TRAIN_ID"] == int(cancel):
                 t_info = t
@@ -99,8 +104,6 @@ class CheckBooked:
             else:
                 print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해주세요." + "\033[0m")
 
-
-
     def menu(self):
         while True:
             print("[예매 정보 확인]")
@@ -115,4 +118,4 @@ class CheckBooked:
             if sel == "2" or sel == "뒤로가기":
                 break
             else:
-                print("\033[31m"+"* 잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요."+"\033[0m")
+                print("\033[31m" + "* 잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요." + "\033[0m")

@@ -32,6 +32,6 @@ class Dummy:
             for td in train_data:
                 print(td["TRAIN_ID"])
         elif weight > 0:
-            train = Train("upward")
+            Train("upward")
         else:
             print("출발역과 도착역이 같습니다.")

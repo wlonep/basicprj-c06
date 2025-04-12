@@ -2,13 +2,13 @@ import os
 
 
 class Train:
-    def __init__(self, way: str, train_ids: list = None):
+    def __init__(self, way: str = None, train_ids: list = None):
         self.way = way
         self.train_data = {}
         self.train_ids = train_ids
         if not self.train_ids:
             self.__load_train_data(f"src/train/{self.way}")
-        self.book_limit = 20    # 예약 가능한 좌석 수
+        self.book_limit = 20  # 예약 가능한 좌석 수
 
     @staticmethod
     def __add_data(lines: list) -> dict:
@@ -32,8 +32,7 @@ class Train:
 
     @staticmethod
     def calc_fee(fee: int, base_fee: int, all_st: int, stop_st: int) -> int:
-        return int(round(base_fee + (fee - base_fee) * ( stop_st / all_st ),-2))
-
+        return int(round(base_fee + (fee - base_fee) * (stop_st / all_st), -2))
 
     def __load_train_data(self, directory: str):
         """
@@ -117,4 +116,3 @@ class Train:
                             lines = file.readlines()
                         result.append(self.__add_data(lines))
         return result
-

@@ -110,6 +110,6 @@ class User:
             password = data["password"]
             file.write(f"{password}")
             for key in data["booked_list"]:
-                if  key == cancel:
+                if key == cancel:
                     continue
-                file.write(f"\n{key}-{data["booked_list"][key]["depart"]}-{data["booked_list"][key]["arrive"]}")
+                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}")
