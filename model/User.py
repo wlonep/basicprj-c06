@@ -71,9 +71,11 @@ class User:
         correct = lines[0].strip()
         if password != correct:
             return False
-        self.__load_user_data()
+        self.__load_user_data(uid)
 
-    def __load_user_data(self):
+    def __load_user_data(self, uid: str = None):
+        if not self.user_id:
+            self.user_id = uid
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "r", encoding='UTF-8') as file:
             lines = file.readlines()
         self.user_data["password"] = lines[0].strip()
