@@ -1,0 +1,5 @@
+TRAIN_ID=171
+STATION=서울,영등포,수원,대전,김천구미,동대구,부산
+FEE=50000
+BASE_FEE=7000
+BOOKED=

@@ -1,0 +1,5 @@
+TRAIN_ID=12
+STATION=부산,울산,경주,동대구,서대구,대전,천안아산,광명,서울
+FEE=43250
+BASE_FEE=7000
+BOOKED=

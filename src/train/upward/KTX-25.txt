@@ -1,0 +1,5 @@
+TRAIN_ID=25
+STATION=서울,광명,천안아산,대전,동대구,경주,울산,부산
+FEE=40750
+BASE_FEE=7000
+BOOKED=
