@@ -13,11 +13,13 @@ class User:
         self.__USER_FILES = "src/user"
         self.user_ids = []
         self.user_data = {}
-        if not user_id:
-            self.__load_user_data()
         self.user_id = user_id
+        if not user_id:
+            self.__load_user_ids()
+        else:
+            self.__load_user_data()
 
-    def __load_user_data(self):
+    def __load_user_ids(self):
         """
         사용자 데이터 로드 함수입니다.
         클래스 선언 시 init 함수에서 함께 실행됩니다.
@@ -69,14 +71,22 @@ class User:
         correct = lines[0].strip()
         if password != correct:
             return False
+        self.__load_user_data(uid)
+
+    def __load_user_data(self, uid: str = None):
+        if not self.user_id:
+            self.user_id = uid
+        with open(f"{self.__USER_FILES}/{self.user_id}.txt", "r", encoding='UTF-8') as file:
+            lines = file.readlines()
+        self.user_data["password"] = lines[0].strip()
+        self.user_data["booked_list"] = {}
         for line in lines[1:]:
             # temp[0] = train_id인데, 이 값이 정수형이 아닌 경우 오류 발생함
-            temp = line.split('-')
-            self.user_data[int(temp[0])] = {
+            temp = line.strip().split('-')
+            self.user_data["booked_list"][int(temp[0])] = {
                 "depart": temp[1],
                 "arrive": temp[2],
             }
-        return True
 
     def add_booking(self, train_id: int, depart: str, arrive: str) -> bool:
         """
@@ -95,3 +105,13 @@ class User:
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
             file.write(f"\n{train_id}-{depart}-{arrive}")
         return True
+
+    def cancel_booked(self, cancel: int):
+        with open(f"{self.__USER_FILES}/{self.user_id}.txt", "w", encoding='UTF-8') as file:
+            data = self.user_data
+            password = data["password"]
+            file.write(f"{password}")
+            for key in data["booked_list"]:
+                if key == cancel:
+                    continue
+                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}")
