@@ -5,163 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c564dee-f4cc-4bc8-a6b1-03e1cd20f541" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/basicprj-c06.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/booktrain.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-10.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-100.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-102.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-104.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-106.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-108.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-110.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-112.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-116.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-118.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-12.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-120.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-122.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-124.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-126.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-128.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-14.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-16.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-162.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-164.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-166.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-170.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-172.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-174.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-176.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-18.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-182.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-188.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-190.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-192.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-194.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-198.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-20.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-22.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-24.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-26.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-28.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-30.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-32.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-34.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-36.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-38.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-40.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-42.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-44.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-46.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-48.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-50.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-52.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-54.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-56.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-58.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-6.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-60.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-62.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-64.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-66.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-68.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-70.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-72.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-74.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-8.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-82.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-84.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-86.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-88.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-90.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-9032.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-9182.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-9192.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-92.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-94.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-96.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/downward/KTX-98.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-101.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-103.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-105.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-107.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-109.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-11.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-111.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-117.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-119.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-121.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-123.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-125.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-127.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-13.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-15.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-161.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-163.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-165.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-17.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-171.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-173.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-175.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-177.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-181.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-183.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-19.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-191.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-193.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-195.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-21.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-23.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-25.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-27.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-29.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-31.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-33.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-35.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-37.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-39.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-41.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-43.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-45.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-47.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-49.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-51.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-53.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-55.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-57.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-59.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-61.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-63.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-65.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-67.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-69.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-7.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-71.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-73.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-75.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-83.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-85.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-87.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-89.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-9.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-9017.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-91.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-9181.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-93.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-95.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/train/upward/KTX-97.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/user/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/booktrain.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/booktrain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -208,25 +54,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.activate_this.executor&quot;: &quot;Run&quot;,
-    &quot;Python.booktrain.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dummy.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/junki/PycharmProjects/basicprj-c06/core&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.activate_this.executor": "Run",
+    "Python.booktrain.executor": "Run",
+    "Python.dummy.executor": "Run",
+    "Python.main.executor": "Debug",
+    "Python.train.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/junki/PycharmProjects/basicprj-c06/core",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: []
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": []
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\junki\PycharmProjects\basicprj-c06\core" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\junki\PycharmProjects\basicprj-c06\core" />
     </key>
   </component>

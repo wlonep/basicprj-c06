@@ -1,4 +1,4 @@
-from core import BookTrain
+from core.booktrain import BookTrain
 from core.dummy import Dummy
 from model.User import User
 
@@ -22,4 +22,4 @@ if __name__ == '__main__':
     """
 
     i = BookTrain()
-    i.print_train()
+    i.print_menu()
