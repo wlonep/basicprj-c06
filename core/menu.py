@@ -4,18 +4,20 @@ from.admin import Admin
 
 def admin_menu():
     admin = Admin()
-    print("[관리자 메뉴]")
-    print("1. 목록조회")
-    print("2. 편성추가")
-    print("3. 로그아웃")
+
     while True:
+        print("[관리자 메뉴]")
+        print("1. 목록조회")
+        print("2. 편성추가")
+        print("3. 로그아웃")
         sel = input("원하는 메뉴를 입력하세요: ")
 
         if sel == "1" or sel == "목록조회":
+            admin.get_train_list()
+        elif sel == "2" or sel == "편성추가":
+            admin.create_train_file()
             """"""
-        if sel == "2" or sel == "편성추가":
-            """"""
-        if sel == "3" or sel == "로그아웃":
+        elif sel == "3" or sel == "로그아웃":
             print("로그아웃합니다. 이용해주셔서 감사합니다.")
             return
         else:
