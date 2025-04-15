@@ -1,5 +1,6 @@
 from model import Train
 import os
+import re
 
 class Admin:
     def __init__(self):
@@ -57,22 +58,6 @@ class Admin:
                         continue
         return existing_ids
 
-    def validate_train_data(self, data: dict) -> bool:
-        """기차 편성 데이터를 검증하는 메서드"""
-
-        fee = data.get("FEE")
-        base_fee = data.get("BASE_FEE")
-
-        if not (isinstance(fee, int) and 1 <= fee < 1000000):
-            raise ValueError("*FEE는 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
-        if not (isinstance(base_fee, int) and base_fee >= 1):
-            #변경해야함
-            raise ValueError("BASE_FEE must be an integer greater than or equal to 1.")
-        if not (fee > base_fee):
-            raise ValueError("*BASE_FEE는 FEE보다 작은 값이어야 합니다. 다시 입력해주세요.")
-
-        return True
-
     def get_input(self, prompt, validation_function=None, *args):
         while True:
             user_input = input(prompt)
@@ -89,14 +74,27 @@ class Admin:
         try:
             tid = self.get_input("TRAIN_ID: ", self.validate_train_id)
             stations_input = self.get_input("STATION: ", self.validate_stations_input)
-            while True:
-                fee = self.get_input("FEE: ", self.validate_fee)
-                try :
-                    base_fee = self.get_input("BASE_FEE: ", self.validate_base_fee, fee)
-                    break
-                except ValueError as ve:
-                    print(f"입력 오류")
 
+            while True:
+                # FEE 입력 받기
+                fee = self.get_input("FEE: ", self.validate_fee)
+                base_fee = None  # 예외 대비 초기화
+                base_fee_input = input("BASE_FEE: ")
+
+                if not base_fee_input or re.search(r"\s", base_fee_input):
+                    print("*BASE_FEE는 1 이상 FEE 미만의 자연수여야 합니다.")
+                    continue
+
+                if not base_fee_input.isdigit():
+                    print("*BASE_FEE는 1 이상 FEE 미만의 자연수여야 합니다.")
+                    continue
+
+                base_fee = int(base_fee_input)
+                if base_fee < 1 or base_fee >= fee:
+                    print("*BASE_FEE는 1 이상 FEE 미만의 자연수여야 합니다.")
+                    continue
+
+                break
 
             data = {
                 "TRAIN_ID": int(tid),
@@ -105,8 +103,6 @@ class Admin:
                 "FEE": int(fee),
                 "BOOKED": []
             }
-
-            self.validate_train_data(data)
 
             way = "upward" if int(tid) % 2 == 0 else "downward"
             directory = f"src/train/{way}"
@@ -143,26 +139,39 @@ class Admin:
 
     def validate_stations_input(self, user_input):
         """STATION 입력 검증"""
+
+        # 1. 공백 문자(스페이스, 탭, 줄바꿈 등)가 포함된 경우
+        if any(c.isspace() for c in user_input):
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        # 2. 쉼표 이외의 구분자가 있으면 잘못된 형식
+        if re.search(r'[^가-힣,]', user_input):  # 한글과 쉼표 외의 다른 문자
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        # 3. 쉼표가 없으면 오류
         if ',' not in user_input:
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
-        stations = [s.strip() for s in user_input.split(",")]
+        # 4. 쉼표로 분할 후 빈 항목이 있거나, 2개 미만이면 오류
+        stations = user_input.split(',')
+        if '' in stations or len(stations) < 2:
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        # 5. 존재하지 않는 역이 포함되어 있으면 오류
         if any(st not in self.valid_stations for st in stations):
-            raise ValueError("존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        # 6. 역 순서가 오름차순 또는 내림차순이어야 함
         weights = [self.valid_stations.index(st) for st in stations]
         if not (weights == sorted(weights) or weights == sorted(weights, reverse=True)):
             raise ValueError("*입력 순서가 적절하지 않습니다. 다시 입력해주세요.")
         return user_input
 
-    def validate_base_fee(self, user_input, fee):
-        base_fee = int(user_input)
-        if base_fee >= int(fee) or base_fee < 1:
-            raise ValueError("*BASE_FEE는 FEE보다 작은 값이어야 합니다. 다시 입력해주세요.")
-        return base_fee
-
     def validate_fee(self, user_input):
         """FEE 검증"""
+        if re.search(r'\s', user_input) or not user_input.isdigit():
+            raise ValueError("*FEE는 1 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         fee = int(user_input)
         if not (1 <= fee < 1000000):
-            raise ValueError("*FEE는 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
+            raise ValueError("*FEE는 1 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         return fee
