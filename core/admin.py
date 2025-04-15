@@ -42,6 +42,21 @@ class Admin:
                     stations.append(name)
         return stations
 
+    def get_existing_train_ids(self) -> set:
+        existing_ids = set()
+        for direction in ["upward","downward"]:
+            dir_path = f"src/train/{direction}"
+            if not os.path.exists(dir_path):
+                continue
+            for filename in os.listdir(dir_path):
+                if filename.startswith("KTX-") and filename.endswith(".txt"):
+                    try:
+                        train_id = int(filename.split("-")[1].split(".")[0])
+                        existing_ids.add(train_id)
+                    except ValueError:
+                        continue
+        return existing_ids
+
     def validate_train_data(self, data: dict) -> bool:
         """기차 편성 데이터를 검증하는 메서드"""
 
@@ -65,17 +80,23 @@ class Admin:
                 try:
                     return validation_function(user_input, *args)
                 except ValueError as ve:
-                    print(f"❌ 입력 오류: {ve}")
+                    print(f"{ve}")
             else:
                 return user_input
 
     def create_train_file(self):
-        print("=== 열차 편성 정보 입력 ===")
+        print("[열차 편성 추가]")
         try:
             tid = self.get_input("TRAIN_ID: ", self.validate_train_id)
             stations_input = self.get_input("STATION: ", self.validate_stations_input)
-            fee = self.get_input("FEE: ", self.validate_fee)
-            base_fee = self.get_input("BASE_FEE: ", self.validate_base_fee, fee)
+            while True:
+                fee = self.get_input("FEE: ", self.validate_fee)
+                try :
+                    base_fee = self.get_input("BASE_FEE: ", self.validate_base_fee, fee)
+                    break
+                except ValueError as ve:
+                    print(f"입력 오류")
+
 
             data = {
                 "TRAIN_ID": int(tid),
@@ -100,24 +121,34 @@ class Admin:
                         val = ','.join(val)
                     file.write(f"{key}={val}\n")
 
-            print(f"✅ 열차 편성 저장 완료: {file_path}")
+            print("열차 편성이 데이터 파일에 추가되었습니다. 메뉴로 돌아갑니다.")
 
         except Exception as e:
             print(f"❌ 예상치 못한 오류 발생: {e}")
 
     def validate_train_id(self, user_input):
         """TRAIN_ID 검증"""
-        tid = int(user_input)
+        try:
+            tid = int(user_input)
+        except ValueError:
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
         if not (1 <= tid < 10000):
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        existing_ids = self.get_existing_train_ids()
+        if tid in existing_ids:
+            raise ValueError("*목록에 이미 존재하는 열차 고유 번호입니다. 다시 입력해주세요.")
         return tid
 
     def validate_stations_input(self, user_input):
         """STATION 입력 검증"""
+        if ',' not in user_input:
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
         stations = [s.strip() for s in user_input.split(",")]
         if any(st not in self.valid_stations for st in stations):
-            #변경해야함
-            raise ValueError(f"@@Invalid station name in STATION list. Must be in {self.valid_stations}.@@")
+            raise ValueError("존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
         weights = [self.valid_stations.index(st) for st in stations]
         if not (weights == sorted(weights) or weights == sorted(weights, reverse=True)):
             raise ValueError("*입력 순서가 적절하지 않습니다. 다시 입력해주세요.")
@@ -125,9 +156,7 @@ class Admin:
 
     def validate_base_fee(self, user_input, fee):
         base_fee = int(user_input)
-        if base_fee < 1:
-            raise ValueError("@@BASE_FEE must be greater than or equal to 1.@@")
-        if base_fee >= int(fee):
+        if base_fee >= int(fee) or base_fee < 1:
             raise ValueError("*BASE_FEE는 FEE보다 작은 값이어야 합니다. 다시 입력해주세요.")
         return base_fee
 
