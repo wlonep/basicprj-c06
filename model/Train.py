@@ -41,37 +41,47 @@ class Train:
         :param directory: 기차 데이터를 가져올 폴더(upward/downward 구분 위함)
         :return:
         """
+        # directory가 없을 경우
         try:
             if not os.path.isdir(directory):
-                raise FileNotFoundError("train files are missing.")
+                raise NotADirectoryError(f"{directory} folder is missing.")
+        except NotADirectoryError as e:
+            print("\033[31m" + "해당 폴더가 존재하지 않습니다." + "\033[0m")
+            exit()
 
-            data = {}
-            for sf in os.listdir(directory):
-                with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
-                    lines = file.readlines()
-                tid = int(lines[0].strip().split('=')[1])
-                data[tid] = {}
-                for line in lines:
-                    if '=' in line:
-                        key, value = line.strip().split('=', 1)
-                        if key == "BOOKED":
-                            if value == "":
-                                data[tid][key] = []
-                            else:
-                                data[tid][key] = value.split(",")
-                        elif key == "STATION":
-                            data[tid][key] = [s + "역" for s in value.split(",")]
-                        else:
-                            try:
-                                data[tid][key] = int(value)
-                            except ValueError:
-                                data[tid][key] = value.split(",")
-            # noinspection PyTypeChecker
-            self.train_data = dict(sorted(data.items()))
+        # 파일이 없을 경우
+        try:
+            file_list = os.listdir(directory)
+            if not file_list:
+                raise FileNotFoundError("train files are missing.")
         except FileNotFoundError as e:
-            print("\033[31m"+"해당 폴더가 존재하지 않습니다."+"\033[0m")
-        if not os.path.isdir(directory):
-            raise FileNotFoundError("train files are missing.")
+            print("\033[31m" + "해당 폴더에 파일이 존재하지 않습니다." + "\033[0m")
+            exit()
+
+        data = {}
+        for sf in file_list:
+            with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
+                lines = file.readlines()
+            tid = int(lines[0].strip().split('=')[1])
+            data[tid] = {}
+            for line in lines:
+                if '=' in line:
+                    key, value = line.strip().split('=', 1)
+                    if key == "BOOKED":
+                        if value == "":
+                            data[tid][key] = []
+                        else:
+                            data[tid][key] = value.split(",")
+                    elif key == "STATION":
+                        data[tid][key] = [s + "역" for s in value.split(",")]
+                    else:
+                        try:
+                            data[tid][key] = int(value)
+                        except ValueError:
+                            data[tid][key] = value.split(",")
+        # noinspection PyTypeChecker
+        self.train_data = dict(sorted(data.items()))
+
         data = {}
         for sf in os.listdir(directory):
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
