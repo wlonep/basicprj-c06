@@ -4,7 +4,6 @@ from model import Station, Train, User
 
 class BookTrain:
     def __init__(self):
-        self.user = User("test")
         self.train_data = []
         self.depart = ""
         self.arrive = ""
@@ -18,7 +17,7 @@ class BookTrain:
         stations = Station().get_stations("gyeongbu")
         while True:
             self.depart = input("출발역: ")
-            if(self.depart[-1] != "역"):
+            if self.depart[-1] != "역":
                 self.depart +=  "역"
             if self.depart in stations:
                 break

@@ -8,10 +8,7 @@ import re
 초기화면이 아닌 사용자 메뉴 화면에서 무한 루프되므로 해당 부분 처리가 필요합니다.
 """
 if __name__ == '__main__':
-    i = BookTrain()
-    i.print_menu()
     user = User()
-
     while True:
         print("[KTX 예매 프로그램]")
         print("1. 로그인")
