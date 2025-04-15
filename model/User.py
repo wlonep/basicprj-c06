@@ -1,4 +1,5 @@
 import os
+import re
 
 
 class User:
@@ -10,9 +11,14 @@ class User:
         user_id가 지정되지 않은 로그인이나 회원가입 시에만 사용되고,
         User 클래스는 예약 시에도 사용되기 때문에 이와 같이 설계하였습니다.
         """
+
+        # 사용자 데이터 파일이 저장될 디렉토리 경로
         self.__USER_FILES = "src/user"
+        # 모든 사용자 아이디를 저장할 배열
         self.user_ids = []
+        # 특정 사용자와 관련된 데이터를 저장하는 딕셔너리
         self.user_data = {}
+
         self.user_id = user_id
         if not user_id:
             self.__load_user_ids()
@@ -72,7 +78,31 @@ class User:
         if password != correct:
             return False
         self.__load_user_data(uid)
+        return True
 
+    @staticmethod
+    def is_valid_username(username):
+        if re.fullmatch(r'(?=.*[a-z])(?=.*\d)[a-z\d]{4,12}', username):
+            return True
+        return False
+
+    @staticmethod
+    def is_valid_password(password):
+        if re.fullmatch(r'(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}', password):
+            return True
+        return False
+
+    def logout(self):
+        """
+        현재 로그인된 사용자 정보를 초기화하여 로그아웃 처리합니다.
+        :return: None
+        """
+        print("로그아웃합니다. 이용해주셔서 감사합니다.")
+        self.user_id = None
+        self.user_data = {}
+
+
+    # 특정 사용자 아이디 파일의 데이터 호출
     def __load_user_data(self, uid: str = None):
         if not self.user_id:
             self.user_id = uid
