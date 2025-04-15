@@ -1,0 +1,5 @@
+TRAIN_ID=59
+STATION=서울,광명,천안아산,오송,대전,동대구,울산,부산
+FEE=40000
+BASE_FEE=7000
+BOOKED=

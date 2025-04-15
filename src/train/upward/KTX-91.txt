@@ -1,0 +1,5 @@
+TRAIN_ID=91
+STATION=서울,광명,대전,동대구,경주,부산
+FEE=37250
+BASE_FEE=7000
+BOOKED=

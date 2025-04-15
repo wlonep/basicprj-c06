@@ -1,0 +1,5 @@
+TRAIN_ID=165
+STATION=서울,광명,천안아산,대전,동대구,밀양,물금,구포,부산
+FEE=46250
+BASE_FEE=7000
+BOOKED=
