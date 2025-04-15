@@ -3,7 +3,8 @@ import re
 from model import Station, Train, User
 
 class BookTrain:
-    def __init__(self):
+    def __init__(self, user_id : str):
+        self.user = User(user_id)
         self.train_data = []
         self.depart = ""
         self.arrive = ""
@@ -12,7 +13,7 @@ class BookTrain:
             self.__get_train_list()
 
 
-    def __get_train_list(self) -> str:
+    def __get_train_list(self):
         print("[열차 예매]")
         stations = Station().get_stations("gyeongbu")
         while True:
@@ -26,7 +27,7 @@ class BookTrain:
         while True:
             while True:
                 self.arrive = input("도착역: ")
-                if (self.arrive[-1] != "역"):
+                if self.arrive[-1] != "역":
                     self.arrive += "역"
                 if self.arrive in stations:
                     break
@@ -34,10 +35,10 @@ class BookTrain:
                     print("\033[31m"+"*잘못된 입력 형식입니다. 다시 입력해주세요."+"\033[0m")
 
             weight = stations[self.depart] - stations[self.arrive]
-            if weight > 0:
+            if weight < 0:
                 way = "upward"
                 break
-            elif weight < 0:
+            elif weight > 0:
                 way = "downward"
                 break
             else:
@@ -50,25 +51,18 @@ class BookTrain:
         while True:
             tn = input("선택하실 열차 번호를 입력해주세요:")
 
-
-
-            if re.fullmatch(r"[1-9]*\d", tn):
-                break
+            if re.fullmatch(r"[1-9][0-9]*", tn):
+                pass
             else:
                 print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해 주세요." + "\033[0m")
                 continue
             fl = False
-            f = False
-            for t in self.train_data():
-                if tn in t["TRAIN_ID"]:
+
+            for t in self.train_data:
+                if int(tn) == t["TRAIN_ID"]:
                     fl = True
-                    if len(t["BOOKED"]) < self.train.book_limit:
-                        f = True
             if(fl):
-                if(f):
-                    break
-                else:
-                    print("\033[31m" + "*열차에 남은 좌석이 없습니다. 다시 입력해주세요." + "\033[0m")
+                break
             else:
                 print("\033[31m" + "*예매 가능한 열차가 아닙니다. 다시 입력해주세요." + "\033[0m")
 
@@ -82,12 +76,12 @@ class BookTrain:
                     seat += len(t["BOOKED"])
 
             choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n):")
-            if(choose == 'y'):
+            if choose == 'y':
                 self.train.book_seat(int(tn), seat)
                 self.user.add_booking(int(tn), self.depart, self.arrive)
                 print("예매가 완료되었습니다. 메뉴로 돌아갑니다.")
                 break
-            elif(choose == 'n'):
+            elif choose == 'n':
                 print("에매가 취소되었습니다. 메뉴로 돌아갑니다.")
                 break
             else:
@@ -104,7 +98,6 @@ class BookTrain:
 
 
         flag = False
-        t["STATION"].reverse()
         for ts in t["STATION"]:
             if ts == self.depart:
                 flag = True
@@ -140,3 +133,5 @@ class BookTrain:
             self.print_train(t)
             print("-----------------------")
         self.reserve_ticket()
+
+
