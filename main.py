@@ -1,5 +1,6 @@
 from model.User import User
-
+from model.Station import Station
+from model.Train import Train
 """
 임의로 구현한 초기 화면입니다. 실제 초기 화면은 while문을 사용하여
 사용자가 종료하기 전까지 무한으로 반복되고, 로그인 된 상태인 경우
@@ -7,6 +8,10 @@ from model.User import User
 """
 if __name__ == '__main__':
     user = User()
+    station = Station()
+    train = Train("downward")
+    train2 = Train("upward")
+
     while True:
         print("[KTX 예매 프로그램]")
         print("1. 로그인")

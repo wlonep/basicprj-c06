@@ -68,19 +68,20 @@ class Train:
                                 data[tid][key] = value.split(",")
             # noinspection PyTypeChecker
             self.train_data = dict(sorted(data.items()))
+
+            if not os.path.isdir(directory):
+                raise FileNotFoundError("train files are missing.")
+            data = {}
+            for sf in os.listdir(directory):
+                with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
+                    lines = file.readlines()
+                tid = int(lines[0].strip().split('=')[1])
+                data[tid] = self.__add_data(lines)
+
+            # noinspection PyTypeChecker
+            self.train_data = dict(sorted(data.items()))
         except FileNotFoundError as e:
             print("\033[31m"+"해당 폴더가 존재하지 않습니다."+"\033[0m")
-        if not os.path.isdir(directory):
-            raise FileNotFoundError("train files are missing.")
-        data = {}
-        for sf in os.listdir(directory):
-            with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
-                lines = file.readlines()
-            tid = int(lines[0].strip().split('=')[1])
-            data[tid] = self.__add_data(lines)
-
-        # noinspection PyTypeChecker
-        self.train_data = dict(sorted(data.items()))
 
     def get_train_data(self, depart: str, arrive: str) -> list:
         """
