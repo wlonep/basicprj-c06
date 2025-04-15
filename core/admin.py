@@ -159,7 +159,7 @@ class Admin:
 
         # 5. 존재하지 않는 역이 포함되어 있으면 오류
         if any(st not in self.valid_stations for st in stations):
-            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+            raise ValueError("*존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
 
         # 6. 역 순서가 오름차순 또는 내림차순이어야 함
         weights = [self.valid_stations.index(st) for st in stations]
