@@ -1,6 +1,4 @@
-from core.booktrain import BookTrain
 from model.User import User
-import re
 
 """
 임의로 구현한 초기 화면입니다. 실제 초기 화면은 while문을 사용하여
