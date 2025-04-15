@@ -3,15 +3,14 @@ import re
 from model import Station, Train, User
 
 class BookTrain:
-    def __init__(self):
-        self.user = User("test")
+    def __init__(self, user_id : User):
+        self.user = user_id
         self.train_data = []
         self.depart = ""
         self.arrive = ""
         self.train = None
         if not self.train:
             self.__get_train_list()
-
 
     def __get_train_list(self) -> str:
         print("[열차 예매]")
@@ -50,8 +49,6 @@ class BookTrain:
     def reserve_ticket(self):
         while True:
             tn = input("선택하실 열차 번호를 입력해주세요:")
-
-
 
             if re.fullmatch(r"[1-9]*\d", tn):
                 break
