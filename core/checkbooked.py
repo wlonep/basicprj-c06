@@ -46,14 +46,19 @@ class CheckBooked:
         print(tid, '/', final_fee, '/', remain)
         print("-".join([ts[:-1] for ts in t_info["STATION"]]))
 
-    def print_booked_lists(self):
-        info = self.__get_info()
+    def print_booked_lists(self) -> bool:
+        try:
+            info = self.__get_info()
+        except NotADirectoryError:
+            print("\033[31m" + "*예매된 기차가 없습니다." + "\033[0m")
+            return False
         print("열차 번호 / 비용(원) / 예매 좌석(석)")
         print("정차역")
         print("==============================")
         for t_info in info["booked_list"]:
             self.print_booked_info(info, t_info)
             print("------------------------------")
+        return True
 
     def cancel_booked(self):
         print("[예매 취소]")
@@ -96,7 +101,8 @@ class CheckBooked:
     def menu(self):
         while True:
             print("[예매 정보 확인]")
-            self.print_booked_lists()
+            if self.print_booked_lists() is False:
+                return
             print("1. 예매취소")
             print("2. 뒤로가기")
             sel = input("원하는 메뉴를 입력해 주세요: ")
