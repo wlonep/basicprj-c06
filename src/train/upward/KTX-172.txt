@@ -1,0 +1,6 @@
+TRAIN_ID=172
+TRAIN_ID=172
+STATION=부산역,울산역,동대구역,김천구미역,대전역,수원역,영등포역,서울역
+FEE=50250
+BASE_FEE=7000
+BOOKED=1

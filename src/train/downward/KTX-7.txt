@@ -1,0 +1,5 @@
+TRAIN_ID=7
+STATION=행신,서울,광명,오송,대전,김천구미,동대구,경주,울산,부산
+FEE=47500
+BASE_FEE=7000
+BOOKED=
