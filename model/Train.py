@@ -1,5 +1,6 @@
 import os
 
+
 class Train:
     def __init__(self, way: str = None, train_ids: list = None):
         self.way = way
@@ -42,21 +43,13 @@ class Train:
         :return:
         """
         # directory가 없을 경우
-        try:
-            if not os.path.isdir(directory):
-                raise NotADirectoryError(f"{directory} folder is missing.")
-        except NotADirectoryError as e:
-            print("\033[31m" + "해당 폴더가 존재하지 않습니다." + "\033[0m")
-            exit()
+        if not os.path.isdir(directory):
+            raise NotADirectoryError(f"{directory} 폴더를 찾을 수 없습니다.")
 
         # 파일이 없을 경우
-        try:
-            file_list = os.listdir(directory)
-            if not file_list:
-                raise FileNotFoundError("train files are missing.")
-        except FileNotFoundError as e:
-            print("\033[31m" + "해당 폴더에 파일이 존재하지 않습니다." + "\033[0m")
-            exit()
+        file_list = os.listdir(directory)
+        if not file_list:
+            raise FileNotFoundError("열차 파일을 찾을 수 없습니다.")
 
         data = {}
         for sf in file_list:

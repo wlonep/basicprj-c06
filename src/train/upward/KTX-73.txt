@@ -1,5 +1,0 @@
-TRAIN_ID=73
-STATION=서울,광명,천안아산,대전,동대구,울산,부산
-FEE=38750
-BASE_FEE=7000
-BOOKED=

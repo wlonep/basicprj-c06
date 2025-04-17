@@ -2,6 +2,7 @@ from.checkbooked import CheckBooked
 from.booktrain import BookTrain
 from.admin import Admin
 
+
 def admin_menu():
     admin = Admin()
 
@@ -16,7 +17,6 @@ def admin_menu():
             admin.get_train_list()
         elif sel == "2" or sel == "편성추가":
             admin.create_train_file()
-            """"""
         elif sel == "3" or sel == "로그아웃":
             print("로그아웃합니다. 이용해주셔서 감사합니다.")
             return
@@ -25,18 +25,19 @@ def admin_menu():
 
 
 def user_menu(user_id: str):
-    print("[사용자 메뉴]")
-    print("1. 열차예매")
-    print("2. 예매정보")
-    print("3. 로그아웃")
     while True:
+        print("[사용자 메뉴]")
+        print("1. 열차예매")
+        print("2. 예매정보")
+        print("3. 로그아웃")
         sel = input("원하는 메뉴를 입력하세요: ")
 
         if sel == "1" or sel == "열차예매":
-            BookTrain(user_id)
-        if sel == "2" or sel == "예매정보":
-            CheckBooked(user_id)
-        if sel == "3" or sel == "로그아웃":
+            book = BookTrain(user_id)
+            book.print_menu()
+        elif sel == "2" or sel == "예매정보":
+            CheckBooked(user_id).menu()
+        elif sel == "3" or sel == "로그아웃":
             print("로그아웃합니다. 이용해주셔서 감사합니다.")
             return
         else:

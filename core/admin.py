@@ -2,6 +2,7 @@ from model import Train
 import os
 import re
 
+
 class Admin:
     def __init__(self):
         # 클래스 인스턴스가 초기화될 때 호출되는 메서드입니다.
@@ -16,7 +17,7 @@ class Admin:
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
                 if key == "BOOKED":
-                    if value == []:
+                    if not value:
                         value = ""
                 print(f"{key}={value}")
             print("-----------------------------------------------\n\n\n")
@@ -26,12 +27,13 @@ class Admin:
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
                 if key == "BOOKED":
-                    if value == []:
+                    if not value:
                         value = ""
                 print(f"{key}={value}")
             print("-----------------------------------------------\n\n\n")
 
-    def load_valid_stations(self, filepath="src/stations/gyeongbu.txt") -> list:
+    @staticmethod
+    def load_valid_stations(filepath="src/stations/gyeongbu.txt") -> list:
         """유효한 역 목록을 파일에서 읽어오는 메서드"""
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"{filepath} 파일을 찾을 수 없습니다.")
@@ -43,9 +45,10 @@ class Admin:
                     stations.append(name)
         return stations
 
-    def get_existing_train_ids(self) -> set:
+    @staticmethod
+    def get_existing_train_ids() -> set:
         existing_ids = set()
-        for direction in ["upward","downward"]:
+        for direction in ["upward", "downward"]:
             dir_path = f"src/train/{direction}"
             if not os.path.exists(dir_path):
                 continue
@@ -58,7 +61,8 @@ class Admin:
                         continue
         return existing_ids
 
-    def get_input(self, prompt, validation_function=None, *args):
+    @staticmethod
+    def get_input(prompt, validation_function=None, *args):
         while True:
             user_input = input(prompt)
             if validation_function:
@@ -74,10 +78,9 @@ class Admin:
         try:
             tid = self.get_input("TRAIN_ID: ", self.validate_train_id)
             stations_input = self.get_input("STATION: ", self.validate_stations_input)
-
+            fee = self.get_input("FEE: ", self.validate_fee)
             while True:
                 # FEE 입력 받기
-                fee = self.get_input("FEE: ", self.validate_fee)
                 base_fee = None  # 예외 대비 초기화
                 base_fee_input = input("BASE_FEE: ")
 
@@ -167,7 +170,8 @@ class Admin:
             raise ValueError("*입력 순서가 적절하지 않습니다. 다시 입력해주세요.")
         return user_input
 
-    def validate_fee(self, user_input):
+    @staticmethod
+    def validate_fee(user_input):
         """FEE 검증"""
         if re.search(r'\s', user_input) or not user_input.isdigit():
             raise ValueError("*FEE는 1 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")

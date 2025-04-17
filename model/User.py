@@ -71,7 +71,7 @@ class User:
         :return: 입력받은 아이디와 비밀번호가 일치한다면 True를 반환합니다.
         """
         if not os.path.isdir(self.__USER_FILES):
-            raise FileNotFoundError("User data files are missing.")
+            raise FileNotFoundError(f"{self.__USER_FILES} 폴더를 찾을 수 없습니다.")
         with open(f"{self.__USER_FILES}/{uid.lower()}.txt", "r", encoding='UTF-8') as file:
             lines = file.readlines()
         correct = lines[0].strip()
@@ -100,7 +100,6 @@ class User:
         print("로그아웃합니다. 이용해주셔서 감사합니다.")
         self.user_id = None
         self.user_data = {}
-
 
     # 특정 사용자 아이디 파일의 데이터 호출
     def __load_user_data(self, uid: str = None):

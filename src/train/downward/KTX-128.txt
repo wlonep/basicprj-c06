@@ -1,5 +1,0 @@
-TRAIN_ID=128
-STATION=부산,동대구,대전,수원,영등포,서울
-FEE=46750
-BASE_FEE=7000
-BOOKED=

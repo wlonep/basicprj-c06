@@ -7,10 +7,8 @@ class CheckBooked:
         self.user = User(user_id)
 
     def __get_info(self) -> dict:  # 사용자의 모든 예약된 열차 데이터 반환
-        train_ids = []
         user_data = self.user.user_data["booked_list"]
-        for tid in user_data.keys():
-            train_ids.append(tid)
+        train_ids = [tid for tid in user_data.keys()]
         train_ids.sort()
         train = Train(train_ids=train_ids)
         booked_list = train.get_trains()  # 예약된 기차 정보
@@ -46,16 +44,7 @@ class CheckBooked:
         final_fee = Train.calc_fee(fee, base_fee, all_st, stop_st)
 
         print(tid, '/', final_fee, '/', remain)
-
-        flag = False
-        for st in t_info["STATION"]:
-            if st[:-1] == depart:
-                flag = True
-            if st[:-1] == arrive:
-                print(st[:-1])
-                break
-            if flag:
-                print(st[:-1] + "-", end='')
+        print("-".join([ts[:-1] for ts in t_info["STATION"]]))
 
     def print_booked_lists(self):
         info = self.__get_info()

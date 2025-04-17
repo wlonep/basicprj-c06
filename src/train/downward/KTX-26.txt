@@ -1,5 +1,0 @@
-TRAIN_ID=26
-STATION=부산,동대구,서대구,대전,광명,서울
-FEE=38750
-BASE_FEE=7000
-BOOKED=
