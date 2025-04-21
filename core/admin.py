@@ -174,8 +174,8 @@ class Admin:
     def validate_fee(user_input):
         """FEE 검증"""
         if re.search(r'\s', user_input) or not user_input.isdigit():
-            raise ValueError("*FEE는 1 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
+            raise ValueError("*FEE는 2 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         fee = int(user_input)
-        if not (1 <= fee < 1000000):
-            raise ValueError("*FEE는 1 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
+        if not (2 <= fee < 1000000):
+            raise ValueError("*FEE는 2 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         return fee
