@@ -23,7 +23,7 @@ class BookTrain:
             if self.depart in stations:
                 break
             else:
-                print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해주세요." + "\033[0m")
+                print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
         while True:
             while True:
                 self.arrive = input("도착역: ")
@@ -32,7 +32,7 @@ class BookTrain:
                 if self.arrive in stations:
                     break
                 else:
-                    print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해주세요." + "\033[0m")
+                    print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
             weight = stations[self.depart] - stations[self.arrive]
             if weight < 0:
                 way = "downward"
@@ -41,7 +41,7 @@ class BookTrain:
                 way = "upward"
                 break
             else:
-                print("출발역과 도착역이 같습니다.")
+                print("\033[31m" + "* 출발지와 도착지가 같습니다. 다시 입력해주세요." + "\033[0m")
 
         self.train = Train(way)
         self.train_data = self.train.get_train_data(self.depart, self.arrive)
