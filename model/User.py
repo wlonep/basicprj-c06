@@ -118,7 +118,7 @@ class User:
                 "seat": temp[3]
             }
 
-    def add_booking(self, train_id: int, depart: str, arrive: str) -> bool:
+    def add_booking(self, train_id: int, depart: str, arrive: str, seat: str) -> bool:
         """
         사용자 계정에 예매 정보를 추가하는 함수입니다.
         모든 예매는 로그인 후 이루어진다고 가정하여 User 클래스 선언 시
@@ -133,7 +133,7 @@ class User:
             "arrive": arrive,
         }
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
-            file.write(f"\n{train_id}-{depart}-{arrive}")
+            file.write(f"\n{train_id}-{depart}-{arrive}-{seat}")
         return True
 
     def cancel_booked(self, cancel: int):
