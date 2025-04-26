@@ -115,6 +115,23 @@ class Train:
         self.train_data[train_id]["BOOKED"].append(seat_num)
         return self.update_data(train_id)
 
+    def unbook_seat(self, train_id: int) -> bool:
+        """
+        train_id에 해당하는 기차의 BOOKED 리스트에서
+        마지막 예약된 좌석을 제거하는 함수입니다.
+        :param train_id: 기차 아이디(int)
+        :return: 업데이트 성공 여부(bool)
+        """
+        print(self.way)
+        # BOOKED 리스트의 마지막 요소를 제거
+        try :
+            self.train_data[train_id]["BOOKED"].pop()
+        except:
+            raise ValueError("No booked seats to unbook.")
+
+        # 데이터 업데이트
+        return self.update_data(train_id)
+
     def update_data(self, train_id: int) -> bool:
         """
         기차 데이터 파일을 업데이트하는 함수입니다.

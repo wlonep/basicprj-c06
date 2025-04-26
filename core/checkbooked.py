@@ -92,6 +92,11 @@ class CheckBooked:
             yn = input("해당 열차 예매 취소를 진행하시겠습니까? ( 예 y / 아니오 n ): ")
             if yn == "y":
                 self.user.cancel_booked(int(cancel))
+                if int(cancel) % 2 == 1:
+                    t = Train("downward")
+                else:
+                    t = Train("upward")
+                t.unbook_seat(int(cancel))
                 print("취소가 완료되었습니다. 메뉴로 돌아갑니다.")
                 break
             elif yn == "n":
