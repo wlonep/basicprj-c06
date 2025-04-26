@@ -94,12 +94,14 @@ class BookTrain:
 
         all_st = len(t["STATION"])
         stop_st = 0
+        stop_stations = []
 
         flag = False
         for ts in t["STATION"]:
             if ts == self.depart:
                 flag = True
             if flag:
+                stop_stations.append(ts)
                 stop_st += 1
             if ts == self.arrive:
                 break
@@ -108,7 +110,7 @@ class BookTrain:
         total_fee = self.train.calc_fee(fee, base_fee, all_st, stop_st)
 
         print(tid, ' / ', total_fee, ' / ', seat)
-        print("-".join([ts[:-1] for ts in t["STATION"]]))
+        print("-".join([ts[:-1] for ts in stop_stations]))
         return
 
     def print_menu(self):

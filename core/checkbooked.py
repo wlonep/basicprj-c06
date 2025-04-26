@@ -31,12 +31,14 @@ class CheckBooked:
 
         all_st = len(t_info["STATION"])
         stop_st = 0
+        stop_stations = []
 
         flag = False
         for st in t_info["STATION"]:
             if st[:-1] == depart:
                 flag = True
             if flag:
+                stop_stations.append(st)
                 stop_st += 1
             if st[:-1] == arrive:
                 break
@@ -44,7 +46,7 @@ class CheckBooked:
         final_fee = Train.calc_fee(fee, base_fee, all_st, stop_st)
 
         print(tid, '/', final_fee, '/', remain)
-        print("-".join([ts[:-1] for ts in t_info["STATION"]]))
+        print("-".join([ts[:-1] for ts in stop_stations]))
 
     def print_booked_lists(self) -> bool:
         try:
