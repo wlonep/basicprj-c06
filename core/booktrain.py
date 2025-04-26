@@ -57,6 +57,10 @@ class BookTrain:
                 continue
             fl = False
 
+            if int(tn) in list(self.user.user_data["booked_list"].keys()):
+                print("\033[31m" + "* 이미 동일한 열차의 좌석을 예매하였습니다. 다시 입력해주세요." + "\033[0m")
+                continue
+
             for t in self.train_data:
                 if int(tn) == t["TRAIN_ID"]:
                     fl = True
