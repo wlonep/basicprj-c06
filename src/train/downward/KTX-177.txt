@@ -1,5 +1,4 @@
 TRAIN_ID=177
-TRAIN_ID=177
 STATION=서울역,영등포역,수원역,대전역,김천구미역,동대구역,경주역,부산역
 FEE=50000
 BASE_FEE=7000

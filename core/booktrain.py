@@ -48,7 +48,7 @@ class BookTrain:
 
     def reserve_ticket(self):
         while True:
-            tn = input("선택하실 열차 번호를 입력해주세요:")
+            tn = input("선택하실 열차 번호를 입력해주세요: ")
 
             if re.fullmatch(r"[1-9][0-9]*", tn):
                 pass
@@ -74,7 +74,7 @@ class BookTrain:
                     print("====================")
                     seat += len(t["BOOKED"])
 
-            choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n):")
+            choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n): ")
             if choose == 'y':
                 self.train.book_seat(int(tn), seat)
                 self.user.add_booking(int(tn), self.depart[:-1], self.arrive[:-1])

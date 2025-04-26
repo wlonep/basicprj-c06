@@ -124,9 +124,11 @@ class Train:
         train = self.train_data[train_id]
         file_path = f"src/train/{self.way}/KTX-{train_id}.txt"
         with open(file_path, 'w', encoding='UTF-8') as file:
-            file.write(f"TRAIN_ID={train_id}\n")
+            # file.write(f"TRAIN_ID={train_id}\n")
             for key, value in train.items():
                 if isinstance(value, list):
+                    if key == "STATION":
+                        value = [s[:-1] for s in value]
                     value = ','.join(map(str, value))
                 file.write(f"{key}={value}\n")
         return True
