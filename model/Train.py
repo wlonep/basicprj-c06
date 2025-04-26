@@ -55,7 +55,7 @@ class Train:
             if not file_list:
                 raise FileNotFoundError("train files are missing.")
         except FileNotFoundError as e:
-            print("\033[31m" + "해당 폴더에 파일이 존재하지 않습니다." + "\033[0m")
+            print("\033[31m" + "목록 내 열차가 존재하지 않습니다." + "\033[0m")
             exit()
 
         data = {}
