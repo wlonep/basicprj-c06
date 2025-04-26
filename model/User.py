@@ -115,6 +115,7 @@ class User:
             self.user_data["booked_list"][int(temp[0])] = {
                 "depart": temp[1],
                 "arrive": temp[2],
+                "seat": temp[3]
             }
 
     def add_booking(self, train_id: int, depart: str, arrive: str) -> bool:
@@ -143,4 +144,4 @@ class User:
             for key in data["booked_list"]:
                 if key == cancel:
                     continue
-                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}")
+                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}-{data['booked_list'][key]['seat']}")
