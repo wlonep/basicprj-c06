@@ -81,7 +81,7 @@ class BookTrain:
             choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n): ")
             if choose == 'y':
                 self.train.book_seat(int(tn), seat)
-                self.user.add_booking(int(tn), self.depart[:-1], self.arrive[:-1])
+                self.user.add_booking(int(tn), self.depart[:-1], self.arrive[:-1], seat)
                 print("예매가 완료되었습니다. 메뉴로 돌아갑니다.")
                 return
             elif choose == 'n':
