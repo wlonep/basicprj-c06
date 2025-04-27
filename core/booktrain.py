@@ -126,6 +126,7 @@ class BookTrain:
         if len(self.train_data) == 0:
             print("\033[31m" + "* 해당 출발지에서 도착지로 가는 모든 열차의 좌석이 매진되었습니다. 메뉴로 돌아갑니다." + "\033[0m")
             return
+        
         for t in self.train_data:
             self.print_train(t)
             print("-----------------------")
