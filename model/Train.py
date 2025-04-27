@@ -119,9 +119,10 @@ class Train:
         if str(seat_num) in self.train_data[train_id]["BOOKED"]:
             return False
         self.train_data[train_id]["BOOKED"].append(seat_num)
+        self.train_data[train_id]["BOOKED"].sort(key=int)
         return self.update_data(train_id)
 
-    def unbook_seat(self, train_id: int) -> bool:
+    def unbook_seat(self, train_id: int, seat: int) -> bool:
         """
         train_id에 해당하는 기차의 BOOKED 리스트에서
         마지막 예약된 좌석을 제거하는 함수입니다.
@@ -129,13 +130,11 @@ class Train:
         :return: 업데이트 성공 여부(bool)
         """
         print(self.way)
-        # BOOKED 리스트의 마지막 요소를 제거
         try :
-            self.train_data[train_id]["BOOKED"].pop()
+            self.train_data[train_id]["BOOKED"].remove(str(seat))
         except:
             raise ValueError("No booked seats to unbook.")
 
-        # 데이터 업데이트
         return self.update_data(train_id)
 
     def update_data(self, train_id: int) -> bool:

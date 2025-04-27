@@ -97,7 +97,8 @@ class CheckBooked:
                     t = Train("downward")
                 else:
                     t = Train("upward")
-                t.unbook_seat(int(cancel))
+                seat = self.user.user_data["booked_list"][int(cancel)]["seat"]
+                t.unbook_seat(int(cancel), int(seat))
                 print("취소가 완료되었습니다. 메뉴로 돌아갑니다.")
                 break
             elif yn == "n":
