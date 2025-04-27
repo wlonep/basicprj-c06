@@ -15,7 +15,7 @@ class Station:
         :return:
         """
         if not os.path.isdir(self.__STATION_FILES):
-            raise FileNotFoundError("src/stations folder is missing.")
+            raise FileNotFoundError(f"{self.__STATION_FILES} 폴더를 찾을 수 없습니다.")
         for sf in os.listdir(self.__STATION_FILES):
             self.__station_data[sf.replace(".txt", "")] = {}
             with open(f"{self.__STATION_FILES}/{sf}", 'r', encoding='UTF-8') as file:

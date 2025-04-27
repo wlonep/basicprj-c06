@@ -1,19 +1,21 @@
 import os
+import sys
+
 from model.User import User
 from model.Station import Station
 from model.Train import Train
 from core.menu import admin_menu, user_menu
 
-"""
-임의로 구현한 초기 화면입니다. 실제 초기 화면은 while문을 사용하여
-사용자가 종료하기 전까지 무한으로 반복되고, 로그인 된 상태인 경우
-초기화면이 아닌 사용자 메뉴 화면에서 무한 루프되므로 해당 부분 처리가 필요합니다.
-"""
+
 if __name__ == '__main__':
-    user = User()
-    station = Station()
-    train = Train("downward")
-    train2 = Train("upward")
+    try:
+        user = User()
+        station = Station()
+        train = Train("downward")
+        train2 = Train("upward")
+    except Exception as e:
+        print("\033[31m" + f"파일을 불러오는 데 문제가 발생하였습니다.\n{e}" + "\033[0m")
+        sys.exit()
 
     # 사용자가 예약한 KTX 파일이 있는지 확인
     for uid in user.user_ids:
@@ -23,15 +25,14 @@ if __name__ == '__main__':
             # temp[0] = train_id인데, 이 값이 정수형이 아닌 경우 오류 발생함
             temp = line.strip().split('-')
             filename = "KTX-" + temp[0] + ".txt"
-            if int(temp[0]) % 2 == 0 :
+            if int(temp[0]) % 2 == 1:
                 directory = "src/train/downward"
-            else :
+            else:
                 directory = "src/train/upward"
-
-            if not os.path.isfile(os.path.join(directory, filename)):
-                print("파일이 삭제 되었습니다.")
-                exit(0)
-
+            if not os.path.isfile(f'{directory}/{filename}'):
+                print("\033[31m" + f"파일을 불러오는 데 문제가 발생하였습니다."
+                                   f"\n존재하지 않는 열차 번호가 유저 데이터에 존재합니다." + "\033[0m")
+                sys.exit()
 
     while True:
         print("[KTX 예매 프로그램]")
@@ -101,16 +102,10 @@ if __name__ == '__main__':
                     break  # 비밀번호 루프 탈출
                 break  # 아이디 루프 탈출
 
-        elif sel == "3" or "종료":
+        elif sel == "3" or sel == "종료":
             print("[프로그램 종료]")
             print("이용해주셔서 감사합니다.")
             break
 
         else:
             print("*잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요.")
-
-    # 각 클래스 호출 예시입니다. 실제 구동 시에는 삭제해 주세요.
-    # if sel == "2":
-    #     user = User("test")
-    #     print(user.user_id)
-

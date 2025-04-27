@@ -1,5 +1,0 @@
-TRAIN_ID=68
-STATION=부산,울산,경주,동대구,김천구미,대전,광명,서울
-FEE=40500
-BASE_FEE=7000
-BOOKED=

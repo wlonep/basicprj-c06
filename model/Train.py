@@ -1,5 +1,6 @@
 import os
 
+
 class Train:
     def __init__(self, way: str = None, train_ids: list = None):
         self.way = way
@@ -42,12 +43,8 @@ class Train:
         :return:
         """
         # directory가 없을 경우
-        try:
-            if not os.path.isdir(directory):
-                raise NotADirectoryError(f"{directory} folder is missing.")
-        except NotADirectoryError as e:
-            print("\033[31m" + "해당 폴더가 존재하지 않습니다." + "\033[0m")
-            exit()
+        if not os.path.isdir(directory):
+            raise NotADirectoryError(f"{directory} 폴더를 찾을 수 없습니다.")
 
         # 파일이 없을 경우
         try:
@@ -57,7 +54,9 @@ class Train:
         except FileNotFoundError as e:
             print("\033[31m" + "목록 내 열차가 존재하지 않습니다." + "\033[0m")
             exit()
-
+        file_list = os.listdir(directory)
+        if not file_list:
+            raise FileNotFoundError("열차 파일을 찾을 수 없습니다.")
         data = {}
         for sf in file_list:
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
@@ -122,6 +121,23 @@ class Train:
         self.train_data[train_id]["BOOKED"].append(seat_num)
         return self.update_data(train_id)
 
+    def unbook_seat(self, train_id: int) -> bool:
+        """
+        train_id에 해당하는 기차의 BOOKED 리스트에서
+        마지막 예약된 좌석을 제거하는 함수입니다.
+        :param train_id: 기차 아이디(int)
+        :return: 업데이트 성공 여부(bool)
+        """
+        print(self.way)
+        # BOOKED 리스트의 마지막 요소를 제거
+        try :
+            self.train_data[train_id]["BOOKED"].pop()
+        except:
+            raise ValueError("No booked seats to unbook.")
+
+        # 데이터 업데이트
+        return self.update_data(train_id)
+
     def update_data(self, train_id: int) -> bool:
         """
         기차 데이터 파일을 업데이트하는 함수입니다.
@@ -131,9 +147,11 @@ class Train:
         train = self.train_data[train_id]
         file_path = f"src/train/{self.way}/KTX-{train_id}.txt"
         with open(file_path, 'w', encoding='UTF-8') as file:
-            file.write(f"TRAIN_ID={train_id}\n")
+            # file.write(f"TRAIN_ID={train_id}\n")
             for key, value in train.items():
                 if isinstance(value, list):
+                    if key == "STATION":
+                        value = [s[:-1] for s in value]
                     value = ','.join(map(str, value))
                 file.write(f"{key}={value}\n")
         return True

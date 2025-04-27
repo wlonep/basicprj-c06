@@ -1,5 +1,0 @@
-TRAIN_ID=14
-STATION=부산,울산,경주,동대구,김천구미,대전,천안아산,서울
-FEE=40750
-BASE_FEE=7000
-BOOKED=

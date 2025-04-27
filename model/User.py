@@ -71,7 +71,7 @@ class User:
         :return: 입력받은 아이디와 비밀번호가 일치한다면 True를 반환합니다.
         """
         if not os.path.isdir(self.__USER_FILES):
-            raise FileNotFoundError("User data files are missing.")
+            raise FileNotFoundError(f"{self.__USER_FILES} 폴더를 찾을 수 없습니다.")
         with open(f"{self.__USER_FILES}/{uid.lower()}.txt", "r", encoding='UTF-8') as file:
             lines = file.readlines()
         correct = lines[0].strip()
@@ -101,7 +101,6 @@ class User:
         self.user_id = None
         self.user_data = {}
 
-
     # 특정 사용자 아이디 파일의 데이터 호출
     def __load_user_data(self, uid: str = None):
         if not self.user_id:
@@ -116,9 +115,10 @@ class User:
             self.user_data["booked_list"][int(temp[0])] = {
                 "depart": temp[1],
                 "arrive": temp[2],
+                "seat": temp[3]
             }
 
-    def add_booking(self, train_id: int, depart: str, arrive: str) -> bool:
+    def add_booking(self, train_id: int, depart: str, arrive: str, seat: str) -> bool:
         """
         사용자 계정에 예매 정보를 추가하는 함수입니다.
         모든 예매는 로그인 후 이루어진다고 가정하여 User 클래스 선언 시
@@ -133,7 +133,7 @@ class User:
             "arrive": arrive,
         }
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
-            file.write(f"\n{train_id}-{depart}-{arrive}")
+            file.write(f"\n{train_id}-{depart}-{arrive}-{seat}")
         return True
 
     def cancel_booked(self, cancel: int):
@@ -144,4 +144,4 @@ class User:
             for key in data["booked_list"]:
                 if key == cancel:
                     continue
-                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}")
+                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}-{data['booked_list'][key]['seat']}")

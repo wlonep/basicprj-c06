@@ -1,5 +1,0 @@
-TRAIN_ID=60
-STATION=부산,동대구,김천구미,대전,오송,천안아산,광명,서울
-FEE=40250
-BASE_FEE=7000
-BOOKED=

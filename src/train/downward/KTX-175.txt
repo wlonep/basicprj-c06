@@ -1,0 +1,5 @@
+TRAIN_ID=175
+STATION=서울역,영등포역,수원역,대전역,동대구역,울산역,부산역
+FEE=49500
+BASE_FEE=7000
+BOOKED=1
