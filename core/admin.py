@@ -111,8 +111,8 @@ class Admin:
             data = {
                 "TRAIN_ID": int(tid),
                 "STATION": [s.strip() for s in stations_input.split(",") if s.strip()],
-                "BASE_FEE": int(base_fee),
                 "FEE": int(fee),
+                "BASE_FEE": int(base_fee),
                 "BOOKED": []
             }
 
