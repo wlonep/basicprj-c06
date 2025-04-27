@@ -19,8 +19,8 @@ class CheckBooked:
             "booked_list": booked_list
         }
 
-    @staticmethod
-    def print_booked_info(info: dict, t_info: dict):
+
+    def print_booked_info(self, info: dict, t_info: dict):
         tid = t_info["TRAIN_ID"]
 
         fee = t_info["FEE"]
@@ -42,10 +42,11 @@ class CheckBooked:
                 stop_st += 1
             if st[:-1] == arrive:
                 break
-        remain = info["train"].book_limit - len(t_info["BOOKED"])
+
+        seat = self.user.user_data["booked_list"][int(tid)]["seat"]
         final_fee = Train.calc_fee(fee, base_fee, all_st, stop_st)
 
-        print(tid, '/', final_fee, '/', remain)
+        print(tid, '/', final_fee, '/', seat)
         print("-".join([ts[:-1] for ts in stop_stations]))
 
     def print_booked_lists(self) -> bool:
@@ -92,6 +93,12 @@ class CheckBooked:
             yn = input("해당 열차 예매 취소를 진행하시겠습니까? ( 예 y / 아니오 n ): ")
             if yn == "y":
                 self.user.cancel_booked(int(cancel))
+                if int(cancel) % 2 == 1:
+                    t = Train("downward")
+                else:
+                    t = Train("upward")
+                seat = self.user.user_data["booked_list"][int(cancel)]["seat"]
+                t.unbook_seat(int(cancel), int(seat))
                 print("취소가 완료되었습니다. 메뉴로 돌아갑니다.")
                 break
             elif yn == "n":

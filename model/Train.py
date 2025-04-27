@@ -47,10 +47,16 @@ class Train:
             raise NotADirectoryError(f"{directory} 폴더를 찾을 수 없습니다.")
 
         # 파일이 없을 경우
+        try:
+            file_list = os.listdir(directory)
+            if not file_list:
+                raise FileNotFoundError("train files are missing.")
+        except FileNotFoundError as e:
+            print("\033[31m" + "목록 내 열차가 존재하지 않습니다." + "\033[0m")
+            exit()
         file_list = os.listdir(directory)
         if not file_list:
             raise FileNotFoundError("열차 파일을 찾을 수 없습니다.")
-
         data = {}
         for sf in file_list:
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:
@@ -113,6 +119,21 @@ class Train:
         if str(seat_num) in self.train_data[train_id]["BOOKED"]:
             return False
         self.train_data[train_id]["BOOKED"].append(seat_num)
+        self.train_data[train_id]["BOOKED"].sort(key=int)
+        return self.update_data(train_id)
+
+    def unbook_seat(self, train_id: int, seat: int) -> bool:
+        """
+        train_id에 해당하는 기차의 BOOKED 리스트에서
+        마지막 예약된 좌석을 제거하는 함수입니다.
+        :param train_id: 기차 아이디(int)
+        :return: 업데이트 성공 여부(bool)
+        """
+        try :
+            self.train_data[train_id]["BOOKED"].remove(str(seat))
+        except:
+            raise ValueError("No booked seats to unbook.")
+
         return self.update_data(train_id)
 
     def update_data(self, train_id: int) -> bool:
