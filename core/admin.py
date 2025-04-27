@@ -12,7 +12,8 @@ class Admin:
     def get_train_list():
         print("[열차 목록 조회]")
         train = Train("downward")
-        for tid, info in train.train_data.items():
+        train_data_items = list(train.train_data.items())
+        for idx, (tid, info) in enumerate(train_data_items):
             for key, value in info.items():
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
@@ -20,9 +21,13 @@ class Admin:
                     if not value:
                         value = ""
                 print(f"{key}={value}")
-            print("-----------------------------------------------\n\n\n")
+            if idx != len(train_data_items) - 1:
+                print("-----------------------------------------------\n\n\n")
+            else:
+                print("-----------------------------------------------")
         train2 = Train("upward")
-        for tid, info in train2.train_data.items():
+        train2_data_items = list(train2.train_data.items())
+        for idx, (tid, info) in enumerate(train2_data_items):
             for key, value in info.items():
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
@@ -30,7 +35,11 @@ class Admin:
                     if not value:
                         value = ""
                 print(f"{key}={value}")
-            print("-----------------------------------------------\n\n\n")
+
+            if idx != len(train2_data_items) - 1:
+                print("-----------------------------------------------\n\n\n")
+            else:
+                print("-----------------------------------------------")
 
     @staticmethod
     def load_valid_stations(filepath="src/stations/gyeongbu.txt") -> list:
