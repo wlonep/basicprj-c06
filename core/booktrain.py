@@ -76,7 +76,15 @@ class BookTrain:
                     print("====================")
                     self.print_train(t)
                     print("====================")
-                    seat += len(t["BOOKED"])
+                    idx = 1
+                    for s in t["BOOKED"]:
+                        if int(s) != idx:
+                            seat = idx
+                            break
+                        else:
+                            idx += 1
+                    else:
+                        seat = idx
 
             choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n): ")
             if choose == 'y':
