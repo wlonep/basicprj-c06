@@ -86,7 +86,7 @@ class Admin:
         print("[열차 편성 추가]")
         try:
             tid = self.get_input("TRAIN_ID: ", self.validate_train_id)
-            stations_input = self.get_input("STATION: ", self.validate_stations_input)
+            stations_input = self.get_input("STATION: ", self.validate_stations_input, tid)
             fee = self.get_input("FEE: ", self.validate_fee)
             while True:
                 # FEE 입력 받기
@@ -149,7 +149,7 @@ class Admin:
             raise ValueError("*목록에 이미 존재하는 열차 고유 번호입니다. 다시 입력해주세요.")
         return tid
 
-    def validate_stations_input(self, user_input):
+    def validate_stations_input(self, user_input, tid):
         """STATION 입력 검증"""
 
         # 1. 공백 문자(스페이스, 탭, 줄바꿈 등)가 포함된 경우
@@ -175,8 +175,18 @@ class Admin:
 
         # 6. 역 순서가 오름차순 또는 내림차순이어야 함
         weights = [self.valid_stations.index(st) for st in stations]
-        if not (weights == sorted(weights) or weights == sorted(weights, reverse=True)):
+        ascending = weights == sorted(weights)
+        descending = weights == sorted(weights, reverse=True)
+
+        if not (ascending or descending):
             raise ValueError("*입력 순서가 적절하지 않습니다. 다시 입력해주세요.")
+
+        # 🔥 7. tid와 역순서 일치 여부 추가
+        if ascending and int(tid) % 2 == 0:
+            raise ValueError("*입력한 열차 고유 번호는 상행이고 입력한 역 목록은 하행입니다. 다시 입력해주세요.")
+        if descending and int(tid) % 2 != 0:
+            raise ValueError("*입력한 열차 고유 번호는 하행이고 입력한 역 목록은 상행입니다. 다시 입력해주세요.")
+
         return user_input
 
     @staticmethod
