@@ -17,7 +17,7 @@ class BookTrain:
         print("[열차 예매]")
         stations = Station().get_stations("gyeongbu")
         while True:
-            self.depart = input("출발역: ")
+            self.depart = input("출발지: ")
             if self.depart[-1] != "역":
                 self.depart += "역"
             if self.depart in stations:
@@ -26,7 +26,7 @@ class BookTrain:
                 print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
         while True:
             while True:
-                self.arrive = input("도착역: ")
+                self.arrive = input("도착지: ")
                 if self.arrive[-1] != "역":
                     self.arrive += "역"
                 if self.arrive in stations:
