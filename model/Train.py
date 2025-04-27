@@ -44,7 +44,7 @@ class Train:
         """
         # directory가 없을 경우
         if not os.path.isdir(directory):
-            raise NotADirectoryError(f"{directory} 폴더를 찾을 수 없습니다.")
+            raise NotADirectoryError("*파일을 불러오는 데 문제가 발생하였습니다.")
 
         # 파일이 없을 경우
         try:
