@@ -2,4 +2,4 @@ TRAIN_ID=111
 STATION=서울,광명,천안아산,대전,서대구,동대구,밀양,구포,부산
 FEE=47250
 BASE_FEE=7000
-BOOKED=1
+BOOKED=
