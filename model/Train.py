@@ -129,7 +129,6 @@ class Train:
         :param train_id: 기차 아이디(int)
         :return: 업데이트 성공 여부(bool)
         """
-        print(self.way)
         try :
             self.train_data[train_id]["BOOKED"].remove(str(seat))
         except:
