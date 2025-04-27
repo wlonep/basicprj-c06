@@ -127,6 +127,7 @@ class Train:
         train_id에 해당하는 기차의 BOOKED 리스트에서
         마지막 예약된 좌석을 제거하는 함수입니다.
         :param train_id: 기차 아이디(int)
+        :param seat:
         :return: 업데이트 성공 여부(bool)
         """
         try :

@@ -6,7 +6,6 @@ from model.Station import Station
 from model.Train import Train
 from core.menu import admin_menu, user_menu
 
-
 if __name__ == '__main__':
     try:
         user = User()
@@ -30,8 +29,7 @@ if __name__ == '__main__':
             else:
                 directory = "src/train/upward"
             if not os.path.isfile(f'{directory}/{filename}'):
-                print("\033[31m" + f"파일을 불러오는 데 문제가 발생하였습니다."
-                                   f"\n존재하지 않는 열차 번호가 유저 데이터에 존재합니다." + "\033[0m")
+                print("\033[31m" + f"파일을 불러오는 데 문제가 발생하였습니다.\n존재하지 않는 열차 번호가 유저 데이터에 존재합니다." + "\033[0m")
                 sys.exit()
 
     while True:
@@ -54,7 +52,7 @@ if __name__ == '__main__':
                         admin_menu()
                         break
                     else:
-                        print("*비밀번호가 일치하지 않습니다. 다시 입력해주세요.")
+                        print("\033[31m" + "*로그인 정보가 틀렸습니다. 처음부터 다시 입력하세요." + "\033[0m")
                         continue
 
                 if user.is_user_exist(uid):  # 아이디 확인
@@ -65,9 +63,9 @@ if __name__ == '__main__':
                         user_menu(uid)
                         break
                     else:
-                        print("*비밀번호가 일치하지 않습니다. 다시 입력해주세요.")
+                        print("\033[31m" + "*로그인 정보가 틀렸습니다. 처음부터 다시 입력하세요." + "\033[0m")
                 else:
-                    print("*존재하지 않는 아이디입니다. 다시 입력해주세요.")
+                    print("\033[31m" + "*로그인 정보가 틀렸습니다. 처음부터 다시 입력하세요." + "\033[0m")
 
         elif sel in ["2", "회원가입"]:
             print("[회원가입]")

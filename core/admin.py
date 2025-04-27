@@ -78,7 +78,7 @@ class Admin:
                 try:
                     return validation_function(user_input, *args)
                 except ValueError as ve:
-                    print(f"{ve}")
+                    print("\033[31m" + f"{ve}" + "\033[0m")
             else:
                 return user_input
 
@@ -122,15 +122,12 @@ class Admin:
             file_path = f"{directory}/KTX-{tid}.txt"
 
             with open(file_path, 'w', encoding='UTF-8') as file:
-                file.write(f"TRAIN_ID={tid}\n")
-                for key in ["STATION", "BASE_FEE", "FEE", "BOOKED"]:
-                    val = data[key]
-                    if isinstance(val, list):
-                        val = ','.join(val)
-                    file.write(f"{key}={val}\n")
+                for key, value in data.items():
+                    if isinstance(value, list):
+                        value = ','.join(value)
+                    file.write(f"{key}={value}\n")
 
             print("열차 편성이 데이터 파일에 추가되었습니다. 메뉴로 돌아갑니다.")
-
         except Exception as e:
             print(f"❌ 예상치 못한 오류 발생: {e}")
 
