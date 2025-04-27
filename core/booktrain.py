@@ -46,6 +46,7 @@ class BookTrain:
         self.train = Train(way)
         self.train_data = self.train.get_train_data(self.depart, self.arrive)
 
+
     def reserve_ticket(self):
         while True:
             tn = input("선택하실 열차 번호를 입력해주세요: ")
@@ -118,11 +119,14 @@ class BookTrain:
         return
 
     def print_menu(self):
-
         print("====================")
         print("열차 번호 / 비용(원) / 남은 좌석(석)")
         print("정차역")
         print("====================")
+        if len(self.train_data) == 0:
+            print("\033[31m" + "* 해당 출발지에서 도착지로 가는 모든 열차의 좌석이 매진되었습니다. 메뉴로 돌아갑니다." + "\033[0m")
+            return
+
         for t in self.train_data:
             self.print_train(t)
             print("-----------------------")
