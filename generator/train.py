@@ -40,7 +40,7 @@ def main(sheet_data, header, dir_path):
         # else:
         #     operation = ','.join(list(row[20].value))
 
-        for cell in row[2:20]:
+        for cell in row[2:]:
             if cell.value.strftime("%H%M") == "0000":
                 pass
             else:
@@ -50,6 +50,7 @@ def main(sheet_data, header, dir_path):
 
         train_data = f"""TRAIN_ID={train_id}
 STATION={','.join(stations)}
+STOP_TIME={','.join(stop_time)}
 FEE={calculate_fee(stop_time[0], stop_time[-1])}
 BASE_FEE=7000
 BOOKED="""
@@ -61,13 +62,31 @@ BOOKED="""
 wb = openpyxl.load_workbook("train_data.xlsx")
 
 # 경부선
-sheet = wb["경부선"]
-downward_sheet = sheet['B11':'V82']
-downward_header = sheet['D8':'U8']
-downward_dir = '../src/train/downward'
-upward_sheet = sheet['X11':'AR86']
-upward_header = sheet['Z8':'AQ8']
-upward_dir = '../src/train/upward'
+# sheet = wb["경부선"]
+# downward_sheet = sheet['B11':'U82']
+# downward_header = sheet['D8':'U8']
+# downward_dir = './train/downward'
+# upward_sheet = sheet['X11':'AQ86']
+# upward_header = sheet['Z8':'AQ8']
+# upward_dir = './train/upward'
+
+# 강릉선
+# sheet = wb["강릉선"]
+# downward_sheet = sheet['B11':'S41']
+# downward_header = sheet['D8':'S8']
+# downward_dir = './train/downward'
+# upward_sheet = sheet['V11':'AM41']
+# upward_header = sheet['V8':'AM8']
+# upward_dir = './train/upward'
+
+# 중앙선
+sheet = wb["중앙선"]
+downward_sheet = sheet['B11':'S19']
+downward_header = sheet['D8':'S8']
+downward_dir = './train/downward'
+upward_sheet = sheet['V11':'AM19']
+upward_header = sheet['V8':'AM8']
+upward_dir = './train/upward'
 
 if not os.path.exists(upward_dir):
     os.makedirs(upward_dir)
