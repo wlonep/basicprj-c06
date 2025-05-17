@@ -39,12 +39,11 @@ def main(sheet_data, header, dir_path):
         #     operation = "월,화,수,목,금,토,일"
         # else:
         #     operation = ','.join(list(row[20].value))
-
         for cell in row[2:]:
             if cell.value.strftime("%H%M") == "0000":
                 pass
             else:
-                stations.append(header[0][cell_count].value)
+                stations.append(header[0][cell_count].value.replace('(오대산)', ''))
                 stop_time.append(cell.value.strftime("%H%M"))
             cell_count += 1
 
@@ -76,7 +75,7 @@ wb = openpyxl.load_workbook("train_data.xlsx")
 # downward_header = sheet['D8':'S8']
 # downward_dir = './train/downward'
 # upward_sheet = sheet['V11':'AM41']
-# upward_header = sheet['V8':'AM8']
+# upward_header = sheet['X8':'AM8']
 # upward_dir = './train/upward'
 
 # 중앙선
@@ -85,7 +84,7 @@ downward_sheet = sheet['B11':'S19']
 downward_header = sheet['D8':'S8']
 downward_dir = './train/downward'
 upward_sheet = sheet['V11':'AM19']
-upward_header = sheet['V8':'AM8']
+upward_header = sheet['X8':'AM8']
 upward_dir = './train/upward'
 
 if not os.path.exists(upward_dir):
