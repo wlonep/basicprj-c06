@@ -1,9 +1,9 @@
 import os
 import sys
 
-from model.User import User
-from model.Station import Station
-from model.Train import Train
+from model.user import User
+from model.station import Station
+from model.train import Train
 from core.menu import admin_menu, user_menu
 
 if __name__ == '__main__':

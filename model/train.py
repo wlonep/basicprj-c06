@@ -107,34 +107,26 @@ class Train:
                 train_list.append(td)
         return train_list
 
-    def book_seat(self, train_id: int, seat_num: int) -> bool:
+    def book_seat(self, train_id: int, seat_id: int) -> bool:
         """
         기차 파일에 예약된 좌석을 저장하는 함수입니다.
         :param train_id: 기차 아이디(int)
         :param seat_num: 예약할 좌석 번호(int)
         :return:
         """
-        if seat_num < 1 or seat_num > self.book_limit:
+        if seat_id < 1 or seat_id > self.book_limit:
             raise ValueError("Invalid seat number.")
-        if str(seat_num) in self.train_data[train_id]["BOOKED"]:
+        if str(seat_id) in self.train_data[train_id]["BOOKED"]:
             return False
-        self.train_data[train_id]["BOOKED"].append(seat_num)
-        self.train_data[train_id]["BOOKED"].sort(key=int)
+        self.train_data[train_id]["BOOKED"].append(str(seat_id))
         return self.update_data(train_id)
 
-    def unbook_seat(self, train_id: int, seat: int) -> bool:
-        """
-        train_id에 해당하는 기차의 BOOKED 리스트에서
-        마지막 예약된 좌석을 제거하는 함수입니다.
-        :param train_id: 기차 아이디(int)
-        :param seat:
-        :return: 업데이트 성공 여부(bool)
-        """
-        try :
-            self.train_data[train_id]["BOOKED"].remove(str(seat))
-        except:
-            raise ValueError("No booked seats to unbook.")
-
+    def unbook_seat(self, train_id: int, seat_id: int) -> bool:
+        if seat_id < 1 or seat_id > self.book_limit:
+            raise ValueError("Invalid seat number.")
+        if str(seat_id) not in self.train_data[train_id]["BOOKED"]:
+            return False
+        self.train_data[train_id]["BOOKED"].remove(str(seat_id))
         return self.update_data(train_id)
 
     def update_data(self, train_id: int) -> bool:
