@@ -118,30 +118,23 @@ class User:
                 "seat": temp[3]
             }
 
-    def add_booking(self, train_id: int, depart: str, arrive: str, seat: str) -> bool:
-        """
-        사용자 계정에 예매 정보를 추가하는 함수입니다.
-        모든 예매는 로그인 후 이루어진다고 가정하여 User 클래스 선언 시
-        user_id를 인자로 받은 경우에만 호출이 가능합니다.
-        :param train_id: 기차 번호(int)
-        :param depart: 출발지(string)
-        :param arrive: 도착지(string)
-        :return: 예약이 정상적으로 처리되었다면 True를 반환합니다.
-        """
-        self.user_data[train_id] = {
-            "depart": depart,
-            "arrive": arrive,
-        }
+    def add_ticket(self, ticket_id: str) -> bool:
+        """사용자 데이터 파일의 맨 밑줄에 티켓 고유 번호를 작성."""
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "a", encoding='UTF-8') as file:
-            file.write(f"\n{train_id}-{depart}-{arrive}-{seat}")
+            file.write(f"\n{ticket_id}")
         return True
 
-    def cancel_booked(self, cancel: int):
+    def remove_ticket(self, ticket_id: str) -> bool:
+        found = False
+        with open(f"{self.__USER_FILES}/{self.user_id}.txt", "r", encoding='UTF-8') as file:
+            lines = file.readlines()
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "w", encoding='UTF-8') as file:
             data = self.user_data
             password = data["password"]
-            file.write(f"{password}")
-            for key in data["booked_list"]:
-                if key == cancel:
+            file.write(f"{password}\n")
+            for line in lines[1:]:
+                if ticket_id in line.strip():
+                    found = True
                     continue
-                file.write(f"\n{key}-{data['booked_list'][key]['depart']}-{data['booked_list'][key]['arrive']}-{data['booked_list'][key]['seat']}")
+                file.write(line)
+        return found

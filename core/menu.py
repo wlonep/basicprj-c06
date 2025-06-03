@@ -1,5 +1,5 @@
-from.checkbooked import CheckBooked
-from.booktrain import BookTrain
+from.check_booked import CheckBooked
+from.book_train import BookTrain
 from.admin import Admin
 
 

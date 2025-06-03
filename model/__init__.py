@@ -1,3 +1,4 @@
-from .User import User
-from .Station import Station
-from .Train import Train
+from .user import User
+from .station import Station
+from .train import Train
+from .ticket import Ticket
