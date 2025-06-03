@@ -56,6 +56,9 @@ class Ticket:
                 return ticket_id
 
     def get_ticket(self, t_id: str = None) -> dict:
+        if (self.ticket_id is None and t_id not in self.ticket_ids) or \
+                (self.ticket_id is not None and self.ticket_id not in self.ticket_ids):
+            raise ValueError("존재하지 않는 티켓 ID입니다.")
         if self.ticket_id is None:
             return {t_id: self.ticket_data.get(t_id, {})}
         return {self.ticket_id: self.ticket_data.get(self.ticket_id, {})}
