@@ -77,7 +77,6 @@ class Ticket:
             "train_ids": data["train_ids"],
             "booked_seats": data["booked_seats"]
         }
-        print(self.ticket_data[t_id])
         with open(f"{self.__TICKET_FILES}/{t_id}.txt", 'w', encoding='UTF-8') as file:
             for key, value in self.ticket_data[t_id].items():
                 file.write(f"{key.upper()}={','.join(str(v) for v in value) if isinstance(value, list) else value}\n")
