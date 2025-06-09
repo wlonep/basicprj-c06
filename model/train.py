@@ -30,9 +30,6 @@ class Train:
                         data[key] = value.split(",")
         return data
 
-    @staticmethod
-    def calc_fee(fee: int, base_fee: int, all_st: int, stop_st: int) -> int:
-        return int(round(base_fee + (fee - base_fee) * (stop_st / all_st), -2))
 
     def __load_train_data(self, directory: str):
         """

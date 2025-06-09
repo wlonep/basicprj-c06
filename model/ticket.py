@@ -1,6 +1,6 @@
 import os
 import random
-
+from model.train import Train
 
 class Ticket:
     def __init__(self, ticket_id: str = None):
@@ -92,3 +92,52 @@ class Ticket:
         self.ticket_ids.remove(t_id)
         os.remove(f"{self.__TICKET_FILES}/{t_id}.txt")
         return True
+
+    @staticmethod
+    def calc_fee(data: dict) -> int:
+
+        stations = data["stations"]
+        train_ids = data["train_ids"]
+        base_fees = []
+        fees = []
+        all_sts = []
+        stop_sts = []
+
+
+        for i, tid in enumerate(train_ids):
+            t_data1 = Train("downward").train_data
+            t_data2 = Train("upward").train_data
+            t_data = {**t_data1, **t_data2}[tid]
+            base_fees.append(t_data["BASE_FEE"])
+            fees.append(t_data["FEE"])
+            all_sts.append(len(t_data["STATION"]))
+            station_list = t_data["STATION"]
+            start_station = stations[i]
+            end_station = stations[i + 1]
+
+            counting = False
+            count = 0
+            for st in station_list:
+                if not counting:
+                    if st[:-1] == start_station:
+                        counting = True
+                        count += 1
+                else:
+                    count += 1
+                    if st[:-1] == end_station:
+                        break
+            stop_sts.append(count)
+
+        base_fee_avg = sum(base_fees) / len(base_fees)
+        extra_fee = sum(
+            (fees[i] - base_fees[i]) * stop_sts[i] / all_sts[i]
+            for i in range(len(train_ids))
+        )
+
+        total_fee = base_fee_avg + extra_fee
+        return int(round(total_fee , -2))
+
+
+    @staticmethod
+    def print_booked_info(t_num: str):
+        """출력하는 함수 구현해주세요!"""
