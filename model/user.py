@@ -108,15 +108,9 @@ class User:
         with open(f"{self.__USER_FILES}/{self.user_id}.txt", "r", encoding='UTF-8') as file:
             lines = file.readlines()
         self.user_data["password"] = lines[0].strip()
-        self.user_data["booked_list"] = {}
+        self.user_data["booked_list"] = []
         for line in lines[1:]:
-            # temp[0] = train_id인데, 이 값이 정수형이 아닌 경우 오류 발생함
-            temp = line.strip().split('-')
-            self.user_data["booked_list"][int(temp[0])] = {
-                "depart": temp[1],
-                "arrive": temp[2],
-                "seat": temp[3]
-            }
+            self.user_data["booked_list"].append(line.strip())
 
     def add_ticket(self, ticket_id: str) -> bool:
         """사용자 데이터 파일의 맨 밑줄에 티켓 고유 번호를 작성."""
