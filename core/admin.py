@@ -6,7 +6,7 @@ import re
 class Admin:
     def __init__(self):
         # 클래스 인스턴스가 초기화될 때 호출되는 메서드입니다.
-        self.valid_stations = self.load_valid_stations()
+        self.valid_station_dict = self.load_all_valid_stations()
 
     @staticmethod
     def get_train_list():
@@ -38,17 +38,28 @@ class Admin:
             print("-----------------------------------------------")
 
     @staticmethod
-    def load_valid_stations(filepath="src/stations/gyeongbu.txt") -> list:
-        """유효한 역 목록을 파일에서 읽어오는 메서드"""
-        if not os.path.exists(filepath):
-            raise FileNotFoundError(f"{filepath} 파일을 찾을 수 없습니다.")
-        with open(filepath, 'r', encoding='UTF-8') as f:
-            stations = []
-            for line in f:
-                if '=' in line:
-                    name, _ = line.strip().split('=')
-                    stations.append(name)
-        return stations
+    def load_all_valid_stations(directory="src/stations") -> dict:
+        """
+        src/stations 폴더 내 모든 *.txt 노선 파일을 읽고
+        {노선명: [역1, 역2, ...]} 형태로 딕셔너리 반환
+        """
+        valid_stations = {}
+        if not os.path.exists(directory):
+            raise FileNotFoundError(f"{directory} 폴더가 존재하지 않습니다.")
+
+        for filename in os.listdir(directory):
+            if filename.endswith(".txt"):
+                route_name = filename.replace(".txt", "")
+                filepath = os.path.join(directory, filename)
+                stations = []
+                with open(filepath, 'r', encoding='UTF-8') as f:
+                    for line in f:
+                        if '=' in line:
+                            name, _ = line.strip().split('=')
+                            stations.append(name)
+                valid_stations[route_name] = stations
+
+        return valid_stations
 
     @staticmethod
     def get_existing_train_ids() -> set:
@@ -83,6 +94,9 @@ class Admin:
         try:
             tid = self.get_input("TRAIN_ID: ", self.validate_train_id)
             stations_input = self.get_input("STATION: ", self.validate_stations_input, tid)
+            station_list = [s.strip() for s in stations_input.split(",") if s.strip()]
+            way = "upward" if int(tid) % 2 == 0 else "downward"
+            stop_times = self.get_input("STOP_TIME: ", self.validate_stop_times_input, station_list, way)
             fee = self.get_input("FEE: ", self.validate_fee)
             while True:
                 # FEE 입력 받기
@@ -107,6 +121,7 @@ class Admin:
             data = {
                 "TRAIN_ID": int(tid),
                 "STATION": [s.strip() for s in stations_input.split(",") if s.strip()],
+                "STOP_TIME": stop_times,
                 "FEE": int(fee),
                 "BASE_FEE": int(base_fee),
                 "BOOKED": []
@@ -162,19 +177,34 @@ class Admin:
         if '' in stations or len(stations) < 2:
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
-        # 5. 존재하지 않는 역이 포함되어 있으면 오류
-        if any(st not in self.valid_stations for st in stations):
-            raise ValueError("*존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
+        # 5. 존재하지 않는 역 이름이 있는지 확인
+        all_valid_stations = set()
+        for route_stations in self.valid_station_dict.values():
+            all_valid_stations.update(route_stations)
 
-        # 6. 역 순서가 오름차순 또는 내림차순이어야 함
-        weights = [self.valid_stations.index(st) for st in stations]
+        for st in stations:
+            if st not in all_valid_stations:
+                raise ValueError("*존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
+
+        # 6. 모든 역이 동일한 노선에 속하는지 확인
+        matched_route = None
+        for route_name, route_stations in self.valid_station_dict.items():
+            if all(st in route_stations for st in stations):
+                matched_route = route_stations
+                break
+
+        if matched_route is None:
+            raise ValueError("*입력된 역들이 서로 다른 노선에 속해있습니다. 다시 입력해주세요.")
+
+        # 6. 입력된 역이 노선 내에서 오름차순 또는 내림차순이어야 함
+        weights = [matched_route.index(st) for st in stations]
         ascending = weights == sorted(weights)
         descending = weights == sorted(weights, reverse=True)
 
         if not (ascending or descending):
             raise ValueError("*입력 순서가 적절하지 않습니다. 다시 입력해주세요.")
 
-        # 🔥 7. tid와 역순서 일치 여부 추가
+        # 7. 열차 번호와 방향 일치 여부 확인
         if ascending and int(tid) % 2 == 0:
             raise ValueError("*입력한 열차 고유 번호는 상행이고 입력한 역 목록은 하행입니다. 다시 입력해주세요.")
         if descending and int(tid) % 2 != 0:
@@ -191,3 +221,69 @@ class Admin:
         if not (2 <= fee < 1000000):
             raise ValueError("*FEE는 2 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         return fee
+
+    def validate_stop_times_input(self, stop_input, station_list, way):
+        import re
+
+        # 1. 문법 규칙 검사
+        if re.search(r'\s', stop_input):
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        stop_times = stop_input.split(',')
+        if len(stop_times) != len(station_list):
+            raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        for st in stop_times:
+            if not re.fullmatch(r'\d{4}', st):
+                raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+
+        # 2. 시간 순서 검사
+        for i in range(1, len(stop_times)):
+            if int(stop_times[i]) <= int(stop_times[i - 1]):
+                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+
+        # 3. 시간 규칙 검사
+        for t in stop_times:
+            hour = int(t[:2])
+            minute = int(t[2:])
+            if not (0 <= hour < 24) or not (0 <= minute < 60):
+                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+
+        # 4. ±3분 이내 정차 충돌 검사
+        def to_minutes(t):
+            return int(t[:2]) * 60 + int(t[2:])
+
+        existing_trains = Train(way)
+        for station, new_time_str in zip(station_list, stop_times):
+            new_time = to_minutes(new_time_str)
+            station_name = station if station.endswith("역") else station + "역"
+
+            for tid, info in existing_trains.train_data.items():
+                if station_name not in info.get("STATION", []):
+                    continue
+
+                index = info["STATION"].index(station_name)
+
+                stop_time_list = info.get("STOP_TIME")
+                if not stop_time_list:
+                    continue
+                if isinstance(stop_time_list, str):
+                    stop_time_list = stop_time_list.split(",")
+                elif not isinstance(stop_time_list, list):
+                    print(f"train {tid}의 STOP_TIME에 잘못된 데이터 형식이 저장되어 있습니다.")
+                    continue
+
+                if len(stop_time_list) <= index:
+                    continue
+
+                try:
+                    existing_time_str = stop_time_list[index]
+                    existing_time = to_minutes(existing_time_str)
+                except Exception as e:
+                    print(f"train {tid}의 STOP_TIME에 잘못된 데이터 형식이 저장되어 있습니다.")
+                    continue
+
+                if abs(existing_time - new_time) <= 3:
+                    raise ValueError(f"*3분 이내에 같은 방향의 다른 열차({tid})가 '{station_name}'에 정차합니다. 다시 입력해주세요.")
+
+        return stop_times
