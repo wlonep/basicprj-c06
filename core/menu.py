@@ -153,7 +153,7 @@ def main_menu():
                     break  # 비밀번호 루프 탈출
                 break  # 아이디 루프 탈출
 
-        elif sel == "3" or sel == "비회원 조회" or "비회원조회":
+        elif sel in ["3", "비회원조회", "비회원 조회"]:
 
             print("[비회원 조회]")
             while True:
@@ -161,7 +161,7 @@ def main_menu():
                 if check_by_ticket(t_id):
                     break  # 조회 성공했을 때만 종료
 
-        elif sel == "4" or sel == "종료":
+        elif sel in ["4", "종료"]:
             print("[프로그램 종료]")
             print("이용해주셔서 감사합니다.")
             break
