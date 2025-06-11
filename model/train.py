@@ -110,7 +110,7 @@ class Train:
         :param seat_id: 예약할 좌석 번호(int)
         :return:
         """
-        if seat_id < 1 or seat_id > self.book_limit:
+        if int(seat_id) < 1 or int(seat_id) > self.book_limit:
             raise ValueError("Invalid seat number.")
         if str(seat_id) in self.train_data[train_id]["BOOKED"]:
             return False
