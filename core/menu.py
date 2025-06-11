@@ -4,6 +4,7 @@ import sys
 from model.user import User
 from model.station import Station
 from model.train import Train
+from model.ticket import Ticket
 
 from.check_booked import CheckBooked
 from.book_train import BookTrain
@@ -88,7 +89,8 @@ def main_menu():
         print("[KTX 예매 프로그램]")
         print("1. 로그인")
         print("2. 회원가입")
-        print("3. 종료")
+        print("3. 비회원 조회")
+        print("4. 종료")
         sel = input("원하는 메뉴를 입력해 주세요: ")
 
         # 로그인
@@ -151,10 +153,28 @@ def main_menu():
                     break  # 비밀번호 루프 탈출
                 break  # 아이디 루프 탈출
 
-        elif sel == "3" or sel == "종료":
+        elif sel == "3" or sel == "비회원 조회" or "비회원조회":
+
+            print("[비회원 조회]")
+            while True:
+                t_id = input("티켓 번호를 입력하세요: ")
+                if check_by_ticket(t_id):
+                    break  # 조회 성공했을 때만 종료
+
+
+        elif sel == "4" or sel == "종료":
             print("[프로그램 종료]")
             print("이용해주셔서 감사합니다.")
             break
 
         else:
             print("*잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요.")
+
+def check_by_ticket(t_id: str):
+    try:
+        ticket = Ticket(t_id)   # 티켓 파일 존재여부 판단
+        Ticket.print_booked_info(t_id)
+        return True
+    except FileNotFoundError:
+        print("\033[31m*티켓 번호가 존재하지 않습니다. 다시 입력해주세요.\033[0m")
+        return False
