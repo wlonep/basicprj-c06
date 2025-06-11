@@ -139,7 +139,6 @@ class Ticket:
 
 
     @staticmethod
-    @staticmethod
     def print_booked_info(t_num):
         # 1. 티켓 정보 불러오기
         data = Ticket.get_ticket(t_num)
