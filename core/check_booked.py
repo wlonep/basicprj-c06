@@ -9,7 +9,6 @@ class CheckBooked:
     def __get_info(self) -> dict:  # 사용자의 모든 예약된 열차 데이터 반환
         return self.user.user_data["booked_list"]
 
-
     def print_booked_lists(self) -> bool:
         try:
             tickets = self.__get_info()
@@ -59,7 +58,7 @@ class CheckBooked:
                 ticket.cancel_ticket(cancel)
 
                 for i in range(len(t_ids)):
-                    if t_ids[i]%2==1:
+                    if t_ids[i] % 2 == 1:
                         t = Train("downward")
                     else:
                         t = Train("upward")
