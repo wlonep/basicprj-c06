@@ -30,7 +30,6 @@ class Train:
                         data[key] = value.split(",")
         return data
 
-
     def __load_train_data(self, directory: str):
         """
         기차 데이터 로드 함수입니다.
@@ -48,7 +47,7 @@ class Train:
             file_list = os.listdir(directory)
             if not file_list:
                 raise FileNotFoundError("train files are missing.")
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print("\033[31m" + "목록 내 열차가 존재하지 않습니다." + "\033[0m")
             exit()
         file_list = os.listdir(directory)
@@ -108,7 +107,7 @@ class Train:
         """
         기차 파일에 예약된 좌석을 저장하는 함수입니다.
         :param train_id: 기차 아이디(int)
-        :param seat_num: 예약할 좌석 번호(int)
+        :param seat_id: 예약할 좌석 번호(int)
         :return:
         """
         if seat_id < 1 or seat_id > self.book_limit:

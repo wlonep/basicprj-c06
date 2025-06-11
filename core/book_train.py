@@ -46,7 +46,6 @@ class BookTrain:
         self.train = Train(way)
         self.train_data = self.train.get_train_data(self.depart, self.arrive)
 
-
     def reserve_ticket(self):
         while True:
             tn = input("선택하실 열차 번호를 입력해주세요: ")

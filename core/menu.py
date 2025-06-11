@@ -6,9 +6,9 @@ from model.station import Station
 from model.train import Train
 from model.ticket import Ticket
 
-from.check_booked import CheckBooked
-from.book_train import BookTrain
-from.admin import Admin
+from .check_booked import CheckBooked
+from .book_train import BookTrain
+from .admin import Admin
 
 
 def admin_menu():
@@ -161,7 +161,6 @@ def main_menu():
                 if check_by_ticket(t_id):
                     break  # 조회 성공했을 때만 종료
 
-
         elif sel == "4" or sel == "종료":
             print("[프로그램 종료]")
             print("이용해주셔서 감사합니다.")
@@ -170,9 +169,10 @@ def main_menu():
         else:
             print("*잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요.")
 
+
 def check_by_ticket(t_id: str):
     try:
-        ticket = Ticket(t_id)   # 티켓 파일 존재여부 판단
+        ticket = Ticket(t_id)  # 티켓 파일 존재여부 판단
         Ticket.print_booked_info(t_id)
         return True
     except FileNotFoundError:

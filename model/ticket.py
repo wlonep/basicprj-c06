@@ -2,6 +2,7 @@ import os
 import random
 from model.train import Train
 
+
 class Ticket:
     def __init__(self, ticket_id: str = None):
         self.__TICKET_FILES = "src/tickets"
@@ -103,7 +104,6 @@ class Ticket:
         all_sts = []
         stop_sts = []
 
-
         for i, tid in enumerate(train_ids):
             t_data1 = Train("downward").train_data
             t_data2 = Train("upward").train_data
@@ -135,8 +135,7 @@ class Ticket:
         )
 
         total_fee = base_fee_avg + extra_fee
-        return int(round(total_fee , -2))
-
+        return int(round(total_fee, -2))
 
     @staticmethod
     def print_booked_info(t_num: str):
