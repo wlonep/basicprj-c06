@@ -1,6 +1,7 @@
 import os
 import random
 from model.train import Train
+from model.user import User
 
 
 class Ticket:
@@ -84,14 +85,42 @@ class Ticket:
         with open(f"{self.__TICKET_FILES}/{t_id}.txt", 'w', encoding='UTF-8') as file:
             for key, value in self.ticket_data[t_id].items():
                 file.write(f"{key.upper()}={','.join(str(v) for v in value) if isinstance(value, list) else value}\n")
+
+        User(user_id).add_ticket(t_id)
+        index = 0
+        train_up = Train("upward")
+        train_down = Train("downward")
+        for train_id in data["train_ids"]:
+            if train_id % 2 == 0:
+                train_up.book_seat(train_id, data["booked_seats"][index])
+            else:
+                train_down.book_seat(train_id, data["booked_seats"][index])
+            index += 1
         return True
 
     def cancel_ticket(self, t_id: str) -> bool:
         if t_id not in self.ticket_ids:
             return False
-        del self.ticket_data[t_id]
+
+        data = self.ticket_data[t_id]
+        user_id = data["user_id"]
+        User(user_id).remove_ticket(t_id)
+
+        train_up = Train("upward")
+        train_down = Train("downward")
+
+        index = 0
+        for train_id in data["train_ids"]:
+            seat_id = data["booked_seats"][index]
+            if train_id % 2 == 0:
+                train_up.unbook_seat(train_id, seat_id)
+            else:
+                train_down.unbook_seat(train_id, seat_id)
+            index += 1
+
         self.ticket_ids.remove(t_id)
         os.remove(f"{self.__TICKET_FILES}/{t_id}.txt")
+        del self.ticket_data[t_id]
         return True
 
     @staticmethod
