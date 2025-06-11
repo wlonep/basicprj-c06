@@ -17,7 +17,7 @@ class Admin:
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
                 elif key == "BOOKED":
-                    if value == []:
+                    if not value:
                         value = ""
                     else:
                         value = ",".join(value)
@@ -30,7 +30,7 @@ class Admin:
                 if key == "STATION":
                     value = ",".join([s.replace("역", "") for s in value])
                 elif key == "BOOKED":
-                    if value == []:
+                    if not value:
                         value = ""
                     else:
                         value = ",".join(value)
@@ -222,7 +222,8 @@ class Admin:
             raise ValueError("*FEE는 2 이상 1000000 미만의 자연수이어야 합니다. 다시 입력해주세요.")
         return fee
 
-    def validate_stop_times_input(self, stop_input, station_list, way):
+    @staticmethod
+    def validate_stop_times_input(stop_input, station_list, way):
         import re
 
         # 1. 문법 규칙 검사
@@ -250,8 +251,8 @@ class Admin:
                 raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
 
         # 4. ±3분 이내 정차 충돌 검사
-        def to_minutes(t):
-            return int(t[:2]) * 60 + int(t[2:])
+        def to_minutes(tm):
+            return int(tm[:2]) * 60 + int(tm[2:])
 
         existing_trains = Train(way)
         for station, new_time_str in zip(station_list, stop_times):
@@ -279,7 +280,7 @@ class Admin:
                 try:
                     existing_time_str = stop_time_list[index]
                     existing_time = to_minutes(existing_time_str)
-                except Exception as e:
+                except Exception:
                     print(f"train {tid}의 STOP_TIME에 잘못된 데이터 형식이 저장되어 있습니다.")
                     continue
 
