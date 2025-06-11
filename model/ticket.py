@@ -139,5 +139,84 @@ class Ticket:
 
 
     @staticmethod
-    def print_booked_info(t_num: str):
-        """출력하는 함수 구현해주세요!"""
+    @staticmethod
+    def print_booked_info(t_num):
+        # 1. 티켓 정보 불러오기
+        data = Ticket.get_ticket(t_num)
+
+        # 2. 필요한 데이터 꺼내기
+        train_ids = data["train_ids"]          # 탑승 열차 번호 리스트
+        stations = data["stations"]            # 거치는 역 리스트
+        seats = data["booked_seats"]           # 좌석 번호 리스트
+
+        # 3. 운임 계산
+        fee = Ticket.calc_fee(data)
+
+        # 4. 각 열차의 정차 시간 불러오기
+        times = []
+        for idx, train_id in enumerate(train_ids):
+            file_loaded = False
+            # 상행/하행 구분해서 둘 다 시도
+            for direction in ["upward", "downward"]:
+                train_file_path = f"src/train/{direction}/KTX-{train_id}.txt"
+                try:
+                    with open(train_file_path, encoding="utf-8") as f:
+                        lines = f.readlines()
+                    # 역 리스트와 시간 리스트 읽기
+                    station_list = None
+                    stop_times = None
+                    for line in lines:
+                        if line.startswith("STATION="):
+                            station_list = line.strip().split("=")[1].split(",")
+                        if line.startswith("STOP_TIME="):
+                            stop_times = line.strip().split("=")[1].split(",")
+                    # 현재 열차 구간에 해당하는 역들의 시간만 추가
+                    if station_list is None or stop_times is None:
+                        print("열차 데이터 파일이 잘못되었습니다.")
+                        return
+                    user_stations = [stations[idx], stations[idx+1]]
+                    for us in user_stations:
+                        idx_in_file = station_list.index(us)
+                        times.append(stop_times[idx_in_file])
+                    file_loaded = True
+                    break
+                except FileNotFoundError:
+                    continue
+            if not file_loaded:
+                print(f"KTX-{train_id} 데이터 파일을 찾을 수 없습니다.")
+                return
+
+        # 5. 소요시간 계산 (여기선 그냥 단순히 첫 출발~마지막 도착 차이)
+        def hhmm_to_min(hhmm):
+            h, m = int(hhmm[:2]), int(hhmm[2:])
+            return h * 60 + m
+        start_min = hhmm_to_min(times[0])
+        end_min = hhmm_to_min(times[-1])
+        dur_h = (end_min - start_min) // 60
+        dur_m = (end_min - start_min) % 60
+
+        # 6. 출력
+        print("─────────────────")
+        # 열차번호 출력
+        print(f"[KTX-{train_ids[0]}", end="")
+        if len(train_ids) > 1:
+            for t in train_ids[1:]:
+                print(f"  →  KTX-{t}", end="")
+        print("]")
+
+        # 역 출력
+        print("  →  ".join(stations))
+        # 시간 출력
+        if len(train_ids) == 1:
+            print(f"{times[0][:2]}:{times[0][2:]}  →  {times[1][:2]}:{times[1][2:]}")
+        else:
+            # 환승의 경우 (두 열차)
+            print(f"{times[0][:2]}:{times[0][2:]}  →  {times[1][:2]}:{times[1][2:]} / "
+                  f"{times[2][:2]}:{times[2][2:]}  →  {times[3][:2]}:{times[3][2:]}")
+        # 좌석 출력
+        print("좌석번호: ", end="")
+        print("  →  ".join([str(s) + "번" for s in seats]))
+        # 비용, 소요시간, 티켓번호
+        print(f"비용: {fee}원 / 소요시간: {dur_h}시간 {dur_m}분")
+        print(f"티켓번호: {t_num}")
+        print("─────────────────")
