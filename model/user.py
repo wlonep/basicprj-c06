@@ -110,6 +110,8 @@ class User:
         self.user_data["password"] = lines[0].strip()
         self.user_data["booked_list"] = []
         for line in lines[1:]:
+            if line.strip() == "":
+                continue
             self.user_data["booked_list"].append(line.strip())
 
     def add_ticket(self, ticket_id: str) -> bool:

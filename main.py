@@ -6,6 +6,7 @@ from model.train import Train
 from model.user import User
 from model.station import Station
 
+
 def parse_train_file(filepath):
     with open(filepath, encoding="utf-8") as f:
         data = {}
@@ -21,6 +22,7 @@ def parse_train_file(filepath):
         raise ValueError()
     return train_id, stations, stop_times
 
+
 def convert_times_to_monotonic(stop_times):
     mono_times = []
     prev = None
@@ -30,7 +32,7 @@ def convert_times_to_monotonic(stop_times):
         if prev is not None:
             if t_min < prev:
                 if 0 <= t < 100:
-                    day_offset += 24*60
+                    day_offset += 24 * 60
                     t_min = (t // 100) * 60 + (t % 100) + day_offset
                 else:
                     raise ValueError()
@@ -38,12 +40,14 @@ def convert_times_to_monotonic(stop_times):
         mono_times.append(t_min)
     return mono_times
 
+
 def check_train_data_validity(train_dirs):
     for train_dir in train_dirs:
         station_time_dict = dict()  # {역이름: [(train_id, stop_time)], ...}
-        train_time_dict = dict()    # 열차번호별 monotonic time list 저장
+        train_time_dict = dict()  # 열차번호별 monotonic time list 저장
         for fname in os.listdir(train_dir):
-            if not fname.endswith(".txt"): continue
+            if not fname.endswith(".txt"):
+                continue
             path = os.path.join(train_dir, fname)
             train_id, stations, stop_times = parse_train_file(path)
             mono_times = convert_times_to_monotonic(stop_times)
@@ -55,7 +59,7 @@ def check_train_data_validity(train_dirs):
             for idx, (t1, t2) in enumerate(zip(mono_times, mono_times[1:])):
                 if t2 - t1 <= 5:
                     st_name1 = stations[idx]
-                    st_name2 = stations[idx+1]
+                    st_name2 = stations[idx + 1]
                     raise ValueError()
             # 2. 역별로 stop_time 모으기 (방향별로만 검사)
             for name, t_mono, t_raw in zip(stations, mono_times, stop_times):
@@ -66,6 +70,7 @@ def check_train_data_validity(train_dirs):
             for (tid1, t1, t_raw1), (tid2, t2, t_raw2) in zip(arr_sorted, arr_sorted[1:]):
                 if t2 - t1 < 3:
                     raise ValueError()
+
 
 if __name__ == '__main__':
     try:
