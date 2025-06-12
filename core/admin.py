@@ -250,7 +250,17 @@ class Admin:
             if not (0 <= hour < 24) or not (0 <= minute < 60):
                 raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
 
-        # 4. ±3분 이내 정차 충돌 검사
+        # 4. 정차역 간 최소 5분 이상 차이 검사
+        def to_minutes(tm):
+            return int(tm[:2]) * 60 + int(tm[2:])
+
+        for i in range(1, len(stop_times)):
+            prev = to_minutes(stop_times[i - 1])
+            curr = to_minutes(stop_times[i])
+            if curr - prev < 5:
+                raise ValueError("*역 간 이동에는 최소 5분 이상이 걸립니다. 다시 입력해주세요.")
+
+        # 5. ±3분 이내 정차 충돌 검사
         def to_minutes(tm):
             return int(tm[:2]) * 60 + int(tm[2:])
 
