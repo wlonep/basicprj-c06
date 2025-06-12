@@ -46,13 +46,10 @@ class Train:
         try:
             file_list = os.listdir(directory)
             if not file_list:
-                raise FileNotFoundError("train files are missing.")
+                raise FileNotFoundError("목록 내 열차가 존재하지 않습니다.")
         except FileNotFoundError:
-            print("\033[31m" + "목록 내 열차가 존재하지 않습니다." + "\033[0m")
-            exit()
-        file_list = os.listdir(directory)
-        if not file_list:
-            raise FileNotFoundError("열차 파일을 찾을 수 없습니다.")
+            raise FileNotFoundError("목록 내 열차가 존재하지 않습니다.")
+
         data = {}
         for sf in file_list:
             with open(f"{directory}/{sf}", 'r', encoding='UTF-8') as file:

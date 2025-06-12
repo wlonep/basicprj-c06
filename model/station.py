@@ -15,9 +15,9 @@ class Station:
         :return:
         """
         if not os.path.isdir(self.__STATION_FILES):
-            raise FileNotFoundError(f"{self.__STATION_FILES} 폴더를 찾을 수 없습니다.")
+            raise FileNotFoundError("목록 내 역이 존재하지 않습니다.")
         if len(os.listdir(self.__STATION_FILES)) == 0:
-            raise FileNotFoundError(f"{self.__STATION_FILES} 폴더에 역 데이터 파일이 없습니다.")
+            raise FileNotFoundError("목록 내 역이 존재하지 않습니다.")
         for sf in os.listdir(self.__STATION_FILES):
             self.__station_data[sf.replace(".txt", "")] = {}
             with open(f"{self.__STATION_FILES}/{sf}", 'r', encoding='UTF-8') as file:

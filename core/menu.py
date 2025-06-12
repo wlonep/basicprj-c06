@@ -1,9 +1,4 @@
-import os
-import sys
-
 from model.user import User
-from model.station import Station
-from model.train import Train
 from model.ticket import Ticket
 
 from .check_booked import CheckBooked
@@ -53,38 +48,7 @@ def user_menu(user_id: str):
 
 
 def main_menu():
-    try:
-        user = User()
-        station = Station()
-        train = Train("downward")
-        train2 = Train("upward")
-    except Exception as e:
-        print("\033[31m" + f"파일을 불러오는 데 문제가 발생하였습니다.\n{e}" + "\033[0m")
-        sys.exit()
-
-    # 사용자가 예약한 KTX 파일이 있는지 확인
-    for uid in user.user_ids:
-        with open(f"src/user/{uid}.txt", "r", encoding='UTF-8') as file:
-            lines = file.readlines()
-
-        for line in lines[1:]:
-            # temp[0] = train_id인데, 이 값이 정수형이 아닌 경우 오류 발생함
-            temp = line.strip().split('-')
-            filename = "KTX-" + temp[0] + ".txt"
-            try:
-                train_id = int(temp[0])
-            except ValueError:
-                print("\033[31m" + "파일을 불러오는 데 문제가 발생하였습니다.\n존재하지 않는 열차 번호가 유저 데이터에 존재합니다." + "\033[0m")
-                sys.exit()
-
-            if int(temp[0]) % 2 == 1:
-                directory = "src/train/downward"
-            else:
-                directory = "src/train/upward"
-            if not os.path.isfile(f'{directory}/{filename}'):
-                print("\033[31m" + "파일을 불러오는 데 문제가 발생하였습니다.\n존재하지 않는 열차 번호가 유저 데이터에 존재합니다." + "\033[0m")
-                sys.exit()
-
+    user = User()
     while True:
         print("[KTX 예매 프로그램]")
         print("1. 로그인")
@@ -172,8 +136,8 @@ def main_menu():
 
 def check_by_ticket(t_id: str):
     try:
-        ticket = Ticket(t_id)  # 티켓 파일 존재여부 판단
-        Ticket.print_booked_info(t_id)
+        ticket = Ticket()  # 티켓 파일 존재여부 판단
+        ticket.print_booked_info(t_id)
         return True
     except FileNotFoundError:
         print("\033[31m*티켓 번호가 존재하지 않습니다. 다시 입력해주세요.\033[0m")
