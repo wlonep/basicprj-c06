@@ -39,6 +39,38 @@ class BookTrain:
                             ticket.get_ticket(ticket_id)
                             ticket_data = ticket.get_ticket(ticket_id)
                             print(ticket_data)
+                            print(f"[KTX-{ticket_data[ticket_id]['train_ids'][0]}]")
+                            print(f"{self.depart[:-1]} -> {self.arrive[:-1]}")
+                            dt_index = self.select_train['STATION'].index(self.depart)
+                            at_index = self.select_train['STATION'].index(self.arrive)
+                            dep_time = self.select_train['STOP_TIME'][dt_index]
+                            arr_time = self.select_train['STOP_TIME'][at_index]
+                            print(f"{dep_time[:2]}:{dep_time[2:]} -> {arr_time[:2]}:{arr_time[2:]}")
+                            print(f"좌석번호 : {ticket_data[ticket_id]['booked_seats'][0]}번")
+                            stationgn = Station().get_stations("gangneung")
+                            stationja = Station().get_stations("jungang")
+
+                            formatgn = list(stationgn.keys())
+                            formatja = list(stationja.keys())
+
+                            gn = all(item in formatgn for item in self.select_train['STATION'])
+                            ja = all(item in formatja for item in self.select_train['STATION'])
+
+                            if gn:
+                                route = 14
+                            if ja:
+                                route = 15
+                            else:
+                                route = 17
+
+                            total_fee = f"비용 : {int(self.select_train['BASE_FEE'] + (self.select_train['FEE'] - self.select_train['BASE_FEE']) * (at_index - dt_index) / route)}원"
+                            hour = int(arr_time[:2]) - int(dep_time[:2])
+                            minute = int(arr_time[2:]) - int(dep_time[2:])
+                            if minute < 0:
+                                minute += 60
+                                hour -= 1
+                            print(f"{total_fee}원 /소요시간 : {hour}시간 {minute}분")
+                            print(f"티켓 번호 : {ticket_id}")
                         print("------------------------------------")
             else:
                 print("\033[31m" + "*잘못된 입력입니다. 올바른 좌석을 선택해주세요." + "\033[0m")
@@ -73,6 +105,61 @@ class BookTrain:
                             if is_ticketed:
                                 ticket_data = ticket.get_ticket(ticket_id)
                                 print(ticket_data)
+                                trans = ticket_data[ticket_id]['stations'][1]
+                                print(f"[KTX-{ticket_data[ticket_id]['train_ids'][0]} -> KTX-{ticket_data[ticket_id]['train_ids'][1]}]")
+                                print(f"{self.depart[:-1]} -> {trans[:-1]} -> {self.arrive[:-1]}")
+                                dt_index = self.select_train[0]['STATION'].index(self.depart)
+                                trb_idx = self.select_train[0]['STATION'].index(trans)
+                                tra_idx = self.select_train[1]['STATION'].index(trans)
+                                at_index = self.select_train[1]['STATION'].index(self.arrive)
+                                dep_time = self.select_train[0]['STOP_TIME'][dt_index]
+                                tr_off_time = self.select_train[0]['STOP_TIME'][trb_idx]
+                                tr_on_time = self.select_train[1]['STOP_TIME'][tra_idx]
+                                arr_time = self.select_train[1]['STOP_TIME'][at_index]
+                                print(f"{dep_time[:2]}:{dep_time[2:]} -> {tr_off_time[:2]}:{tr_off_time[2:]} "
+                                      f"/ {tr_on_time[:2]}:{tr_on_time[2:]} -> {arr_time[:2]}:{arr_time[2:]}")
+                                print(f"좌석번호 : {ticket_data[ticket_id]['booked_seats'][0]}번 -> {ticket_data[ticket_id]['booked_seats'][1]}번")
+                                stationgn = Station().get_stations("gangneung")
+                                stationja = Station().get_stations("jungang")
+
+                                formatgn = list(stationgn.keys())
+                                formatja = list(stationja.keys())
+
+                                gn = all(item in formatgn for item in self.select_train[0]['STATION'])
+                                ja = all(item in formatja for item in self.select_train[0]['STATION'])
+
+                                if gn:
+                                    route1 = 14
+                                elif ja:
+                                    route1 = 15
+                                else:
+                                    route1 = 17
+
+                                gn1 = all(item in formatgn for item in self.select_train[1]['STATION'])
+                                ja1 = all(item in formatja for item in self.select_train[1]['STATION'])
+
+                                if gn1:
+                                    route2 = 14
+                                elif ja1:
+                                    route2 = 15
+                                else:
+                                    route2 = 17
+
+                                base_fee1 = self.select_train[0]['BASE_FEE']
+                                base_fee2 = self.select_train[1]['BASE_FEE']
+                                fee1 = self.select_train[0]['FEE']
+                                fee2 = self.select_train[1]['FEE']
+                                calc_fee = (base_fee1 + base_fee2) / 2 + (fee1 - base_fee1) * (
+                                            trb_idx - dt_index) / route1 + (fee2 - base_fee2) * (
+                                                      at_index - tra_idx) / route2
+
+                                hour = int(arr_time[:2]) - int(dep_time[:2])
+                                minute = int(arr_time[2:]) - int(dep_time[2:])
+                                if minute < 0:
+                                    minute += 60
+                                    hour -= 1
+                                print(f"{int(calc_fee)}원 /소요시간 : {hour}시간 {minute}분")
+                                print(f"티켓 번호 : {ticket_id}")
                         print("------------------------------------")
                         self.count+=1
             else:
@@ -294,7 +381,7 @@ class BookTrain:
                 idx += 1
                 tid = f"[KTX-{tr['TRAIN_ID']}]"
 
-                station = f"{self.depart} → {self.arrive}"
+                station = f"{self.depart[:-1]} → {self.arrive[:-1]}"
 
                 dep_index = tr['STATION'].index(self.depart)
                 arr_index = tr['STATION'].index(self.arrive)
@@ -373,7 +460,7 @@ class BookTrain:
                 arr_id = route[1]['TRAIN_ID']
                 tid = f"{idx}) [KTX-{dep_id}] -> [KTX-{arr_id}]"
 
-                station = f"{self.depart} -> {self.transfers[idx-1]} -> {self.arrive}"
+                station = f"{self.depart[:-1]} -> {self.transfers[idx-1][:-1]} -> {self.arrive[:-1]}"
 
                 dep_index = route[0]['STATION'].index(self.depart)
                 tr_index1 = route[0]['STATION'].index(self.transfers[idx-1])
@@ -415,14 +502,14 @@ class BookTrain:
                 else:
                     route1 = 17
 
-                is_gangneung = all(item in formatgn for item in stations2)
-                is_jungang = all(item in formatja for item in stations2)
-                is_gyeongbu = all(item in formatgb for item in stations2)
+                is_gangneung1 = all(item in formatgn for item in stations2)
+                is_jungang1 = all(item in formatja for item in stations2)
+                is_gyeongbu1 = all(item in formatgb for item in stations2)
 
                 route2 = 0
-                if is_gangneung:
+                if is_gangneung1:
                     route2 = 14
-                elif is_jungang:
+                elif is_jungang1:
                     route2 = 15
                 else:           #elif is_gyeongbu
                     route2 = 17
