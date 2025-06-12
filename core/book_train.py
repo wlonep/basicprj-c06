@@ -41,7 +41,6 @@ class BookTrain:
                     else:
                         ticket = Ticket()
                         ticket_id = ticket.create_ticket_id()
-
                         ticket_dict = {
                             "stations": [self.depart[:-1], self.arrive[:-1]],
                             "train_ids": [self.select_train['TRAIN_ID']],

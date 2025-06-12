@@ -61,13 +61,13 @@ BOOKED="""
 wb = openpyxl.load_workbook("train_data.xlsx")
 
 # 경부선
-# sheet = wb["경부선"]
-# downward_sheet = sheet['B11':'U82']
-# downward_header = sheet['D8':'U8']
-# downward_dir = './train/downward'
-# upward_sheet = sheet['X11':'AQ86']
-# upward_header = sheet['Z8':'AQ8']
-# upward_dir = './train/upward'
+sheet = wb["경부선"]
+downward_sheet = sheet['B11':'U82']
+downward_header = sheet['D8':'U8']
+downward_dir = './train/downward'
+upward_sheet = sheet['X11':'AQ86']
+upward_header = sheet['Z8':'AQ8']
+upward_dir = './train/upward'
 
 # 강릉선
 # sheet = wb["강릉선"]
@@ -79,13 +79,13 @@ wb = openpyxl.load_workbook("train_data.xlsx")
 # upward_dir = './train/upward'
 
 # 중앙선
-sheet = wb["중앙선"]
-downward_sheet = sheet['B11':'S19']
-downward_header = sheet['D8':'S8']
-downward_dir = './train/downward'
-upward_sheet = sheet['V11':'AM19']
-upward_header = sheet['X8':'AM8']
-upward_dir = './train/upward'
+# sheet = wb["중앙선"]
+# downward_sheet = sheet['B11':'S19']
+# downward_header = sheet['D8':'S8']
+# downward_dir = './train/downward'
+# upward_sheet = sheet['V11':'AM19']
+# upward_header = sheet['X8':'AM8']
+# upward_dir = './train/upward'
 
 if not os.path.exists(upward_dir):
     os.makedirs(upward_dir)
