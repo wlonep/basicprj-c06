@@ -10,18 +10,13 @@ class CheckBooked:
         return self.user.user_data["booked_list"]
 
     def print_booked_lists(self) -> bool:
-        try:
-            tickets = self.__get_info()
-        except NotADirectoryError:
+        tickets = self.__get_info()
+        if not tickets:
             print("\033[31m" + "*예매된 기차가 없습니다." + "\033[0m")
             return False
-        print("─────────────────")
+        ticket = Ticket()
         for t_num in tickets:
-            """
-            Ticket.print_booked_info(t_num)
-            """
-            print("출력함수 미완성!")
-            print("─────────────────")
+            ticket.print_booked_info(t_num)
         return True
 
     def cancel_booked(self):
@@ -46,12 +41,8 @@ class CheckBooked:
         t_ids = t_data["train_ids"]
         seats = t_data["booked_seats"]
 
-        print("─────────────────")
-        """
-        Ticket.print_booked_info(cancel)
-        """
-        print("출력함수 미완성!")
-        print("─────────────────")
+        ticket.print_booked_info(cancel)
+
         while True:
             yn = input("해당 열차 예매 취소를 진행하시겠습니까? ( 예 y / 아니오 n ): ")
             if yn == "y":

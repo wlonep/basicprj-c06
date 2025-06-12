@@ -5,7 +5,27 @@ from model import Station, Train, User, Ticket
 
 
 class BookTrain:
-    def reserve_ticket(self, t:dict):
+    def __init__(self, user_id: str):
+        self.user_id = user_id
+        self.user = User(user_id)
+        self.train_data = []
+        self.depart = ""
+        self.arrive = ""
+        self.train = None
+        self.index = 1
+        self.transfer_stations = []
+        self.transfers = []
+        self.seat = []
+        self.flag = 1
+        self.count = 1
+        self.select_train = dict()
+        self.book_seats = []
+        self.isReserved = False
+
+        if not self.train:
+            self.__get_train_list()
+
+    def reserve_ticket(self, t: dict):
         if len(self.transfers) == 0:
             """
                 환승 아닐 경우
@@ -23,12 +43,12 @@ class BookTrain:
                         ticket_id = ticket.create_ticket_id()
 
                         ticket_dict = {
-                            "stations" : [self.depart, self.arrive],
-                            "train_ids" : [self.select_train['TRAIN_ID']],
-                            "booked_seats" : [self.book_seats[0]]
+                            "stations": [self.depart[:-1], self.arrive[:-1]],
+                            "train_ids": [self.select_train['TRAIN_ID']],
+                            "booked_seats": [self.book_seats[0]]
                         }
 
-                        is_ticketed = ticket.book_ticket("test", ticket_id, ticket_dict)
+                        is_ticketed = ticket.book_ticket(self.user_id, ticket_id, ticket_dict)
 
                         print(f"[KTX-{self.select_train['TRAIN_ID']}] {self.book_seats[0]}번 자리 예약이 완료되었습니다.")
                         self.isReserved = True
@@ -69,7 +89,7 @@ class BookTrain:
                             if minute < 0:
                                 minute += 60
                                 hour -= 1
-                            print(f"{total_fee}원 /소요시간 : {hour}시간 {minute}분")
+                            print(f"{total_fee} / 소요시간 : {hour}시간 {minute}분")
                             print(f"티켓 번호 : {ticket_id}")
                         print("------------------------------------")
             else:
@@ -79,16 +99,17 @@ class BookTrain:
             """
                 환승일 경우
             """
-            if re.fullmatch(r"[1-9][0-9]*", str(self.book_seats[self.count-1])):
-                if int(self.book_seats[self.count-1]) > 20:
+            if re.fullmatch(r"[1-9][0-9]*", str(self.book_seats[self.count - 1])):
+                if int(self.book_seats[self.count - 1]) > 20:
                     print("\033[31m" + "*잘못된 입력입니다. 올바른 좌석을 선택해주세요." + "\033[0m")
                     self.print_seats(self.select_train)
                 else:
-                    if self.book_seats[self.count-1] in self.select_train[self.count-1]['BOOKED']:
+                    if self.book_seats[self.count - 1] in self.select_train[self.count - 1]['BOOKED']:
                         print("\033[31m" + "*이미 예약된 좌석입니다. 다른 좌석을 선택해주세요." + "\033[0m")
                         self.print_seats(self.select_train)
                     else:
-                        print(f"[KTX-{self.select_train[self.count-1]['TRAIN_ID']}] {self.book_seats[self.count-1]}번 자리 예약이 완료되었습니다.")
+                        print(
+                            f"[KTX-{self.select_train[self.count - 1]['TRAIN_ID']}] {self.book_seats[self.count - 1]}번 자리 예약이 완료되었습니다.")
                         self.isReserved = True
                         if self.count == 2:
                             print("모든 좌석 선택이 끝났으므로 예매가 종료됩니다.")
@@ -96,8 +117,9 @@ class BookTrain:
                             ticket_id = ticket.create_ticket_id()
 
                             ticket_dict = {
-                                "stations": [self.depart,self.transfers[self.index-2], self.arrive],
-                                "train_ids": [int(self.select_train[0]['TRAIN_ID']), int(self.select_train[1]['TRAIN_ID'])],
+                                "stations": [self.depart, self.transfers[self.index - 2], self.arrive],
+                                "train_ids": [int(self.select_train[0]['TRAIN_ID']),
+                                              int(self.select_train[1]['TRAIN_ID'])],
                                 "booked_seats": [int(self.book_seats[0]), int(self.book_seats[1])]
                             }
 
@@ -106,7 +128,8 @@ class BookTrain:
                                 ticket_data = ticket.get_ticket(ticket_id)
                                 print(ticket_data)
                                 trans = ticket_data[ticket_id]['stations'][1]
-                                print(f"[KTX-{ticket_data[ticket_id]['train_ids'][0]} -> KTX-{ticket_data[ticket_id]['train_ids'][1]}]")
+                                print(
+                                    f"[KTX-{ticket_data[ticket_id]['train_ids'][0]} -> KTX-{ticket_data[ticket_id]['train_ids'][1]}]")
                                 print(f"{self.depart[:-1]} -> {trans[:-1]} -> {self.arrive[:-1]}")
                                 dt_index = self.select_train[0]['STATION'].index(self.depart)
                                 trb_idx = self.select_train[0]['STATION'].index(trans)
@@ -118,7 +141,8 @@ class BookTrain:
                                 arr_time = self.select_train[1]['STOP_TIME'][at_index]
                                 print(f"{dep_time[:2]}:{dep_time[2:]} -> {tr_off_time[:2]}:{tr_off_time[2:]} "
                                       f"/ {tr_on_time[:2]}:{tr_on_time[2:]} -> {arr_time[:2]}:{arr_time[2:]}")
-                                print(f"좌석번호 : {ticket_data[ticket_id]['booked_seats'][0]}번 -> {ticket_data[ticket_id]['booked_seats'][1]}번")
+                                print(
+                                    f"좌석번호 : {ticket_data[ticket_id]['booked_seats'][0]}번 -> {ticket_data[ticket_id]['booked_seats'][1]}번")
                                 stationgn = Station().get_stations("gangneung")
                                 stationja = Station().get_stations("jungang")
 
@@ -150,24 +174,21 @@ class BookTrain:
                                 fee1 = self.select_train[0]['FEE']
                                 fee2 = self.select_train[1]['FEE']
                                 calc_fee = (base_fee1 + base_fee2) / 2 + (fee1 - base_fee1) * (
-                                            trb_idx - dt_index) / route1 + (fee2 - base_fee2) * (
-                                                      at_index - tra_idx) / route2
+                                        trb_idx - dt_index) / route1 + (fee2 - base_fee2) * (
+                                                   at_index - tra_idx) / route2
 
                                 hour = int(arr_time[:2]) - int(dep_time[:2])
                                 minute = int(arr_time[2:]) - int(dep_time[2:])
                                 if minute < 0:
                                     minute += 60
                                     hour -= 1
-                                print(f"{int(calc_fee)}원 /소요시간 : {hour}시간 {minute}분")
-                                print(f"티켓 번호 : {ticket_id}")
+                                print(f"{int(calc_fee)}원 / 소요시간 : {hour}시간 {minute}분")
+                                print(f"티켓 번호: {ticket_id}")
                         print("------------------------------------")
-                        self.count+=1
+                        self.count += 1
             else:
                 print("\033[31m" + "*잘못된 입력입니다. 올바른 좌석을 선택해주세요." + "\033[0m")
                 self.print_seats(self.select_train)
-
-
-
 
         # while True:
         #     tn = input("선택하실 열차 번호를 입력해주세요: ")
@@ -219,25 +240,6 @@ class BookTrain:
         #         return
         #     else:
         #         print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해 주세요." + "\033[0m")
-
-    def __init__(self, user_id: str):
-        self.user = User(user_id)
-        self.train_data = []
-        self.depart = ""
-        self.arrive = ""
-        self.train = None
-        self.index = 1
-        self.transfer_stations = []
-        self.transfers = []
-        self.seat = []
-        self.flag = 1
-        self.count = 1
-        self.select_train = dict()
-        self.book_seats = []
-        self.isReserved = False
-
-        if not self.train:
-            self.__get_train_list()
 
     def __get_train_list(self):
         print("[열차 예매]")
@@ -321,19 +323,9 @@ class BookTrain:
                         train_after = Train(way)
                         tta_list = train_after.get_train_data(ts, self.arrive)
 
-        print(self.transfer_stations)
-        """
-        환승의 경우 환승역을 어떻게 선정했는지 확인하는 용도입니다.
-        """
-
         if self.transfer_stations:
             self.train_data = self.transfer_train_list(dtt_list, tta_list)
 
-        for st in self.train_data:
-            print(st)
-        """
-        조건에 맞는 환승 가능한 기차 리스트를 가져왔는지 확인하는 용도입니다.
-        """
         if not self.transfer_stations:
             if weight < 0:
                 way = "downward"
@@ -434,7 +426,7 @@ class BookTrain:
                 hours = time_taken // 60
                 minutes = time_taken % 60
 
-                print(f"{idx}) {tid}")
+                print(f"─────────────────\n{idx}) {tid}")
                 print(station)
                 print(time)
                 print(seat)
@@ -460,12 +452,12 @@ class BookTrain:
                 arr_id = route[1]['TRAIN_ID']
                 tid = f"{idx}) [KTX-{dep_id}] -> [KTX-{arr_id}]"
 
-                station = f"{self.depart[:-1]} -> {self.transfers[idx-1][:-1]} -> {self.arrive[:-1]}"
+                station = f"{self.depart[:-1]} -> {self.transfers[idx - 1][:-1]} -> {self.arrive[:-1]}"
 
                 dep_index = route[0]['STATION'].index(self.depart)
-                tr_index1 = route[0]['STATION'].index(self.transfers[idx-1])
+                tr_index1 = route[0]['STATION'].index(self.transfers[idx - 1])
                 arr_index = route[1]['STATION'].index(self.arrive)
-                tr_index2 = route[1]['STATION'].index(self.transfers[idx-1])
+                tr_index2 = route[1]['STATION'].index(self.transfers[idx - 1])
 
                 dep_time = route[0]['STOP_TIME'][dep_index]
                 format_dep = f"{dep_time[:2]}:{dep_time[2:]}"
@@ -511,14 +503,15 @@ class BookTrain:
                     route2 = 14
                 elif is_jungang1:
                     route2 = 15
-                else:           #elif is_gyeongbu
+                else:  # elif is_gyeongbu
                     route2 = 17
 
                 fee1 = route[0]['FEE']
                 base_fee1 = route[0]['BASE_FEE']
                 fee2 = route[1]['FEE']
                 base_fee2 = route[1]['BASE_FEE']
-                calc_fee = (base_fee1 + base_fee2) / 2 + (fee1 - base_fee1) * (tr_index1 - dep_index) / route1 + (fee2 - base_fee2) * (arr_index - tr_index2) / route2
+                calc_fee = (base_fee1 + base_fee2) / 2 + (fee1 - base_fee1) * (tr_index1 - dep_index) / route1 + (
+                        fee2 - base_fee2) * (arr_index - tr_index2) / route2
 
                 total_fee = f"비용 : {int(calc_fee)}원"
 
@@ -544,6 +537,7 @@ class BookTrain:
 
         print("--------------------------------")
 
+        number = 0
         while True:
             sta_num = input("열차 목록 중 선택할 번호를 입력해주세요: ")
             if re.fullmatch(r"[1-9][0-9]*", sta_num):
@@ -552,17 +546,15 @@ class BookTrain:
                 print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해 주세요." + "\033[0m")
                 continue
 
-
             number = int(sta_num)
             if number > idx or number == 0:
                 print("*잘못된 입력 형식입니다. 다시 입력해주세요.")
                 continue
             break
 
-
-        if len(self.transfers)==0:
-            print(t[number-1])
-            self.select_train = t[number-1]
+        if len(self.transfers) == 0:
+            print(t[number - 1])
+            self.select_train = t[number - 1]
             self.print_seats(self.select_train)
         else:
             for item in t:
@@ -579,7 +571,7 @@ class BookTrain:
             """
             if self.flag == 1:
                 print("*좌석을 선택합니다.")
-                print(f"[KTX-{t[self.count-1]['TRAIN_ID']} 자리 현황]")
+                print(f"[KTX-{t[self.count - 1]['TRAIN_ID']} 자리 현황]")
                 number = 1
                 for r in range(5):
                     # 상단 선
@@ -588,7 +580,7 @@ class BookTrain:
                     # 숫자 라인
                     for c in range(4):
                         if number <= 20:
-                            if number in t[self.count-1]['BOOKED']:
+                            if number in t[self.count - 1]['BOOKED']:
                                 print("|  X ", end="")  # 예약된 좌석 → X 표시
                             else:
                                 print(f"| {number:2} ", end="")  # 예약 안 된 좌석
@@ -629,9 +621,6 @@ class BookTrain:
                 print("+----" * 4 + "+")
                 self.flag += 1
             self.book_seats.append(input("좌석을 선택해 주세요: "))
-
-
-
 
     def print_menu(self):
         print(self.train_data)

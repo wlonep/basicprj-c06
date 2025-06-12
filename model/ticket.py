@@ -132,10 +132,9 @@ class Ticket:
         all_sts = []
         stop_sts = []
 
-
+        t_data1 = Train("downward").train_data
+        t_data2 = Train("upward").train_data
         for i, tid in enumerate(train_ids):
-            t_data1 = Train("downward").train_data
-            t_data2 = Train("upward").train_data
             t_data = {**t_data1, **t_data2}[tid]
             base_fees.append(t_data["BASE_FEE"])
             fees.append(t_data["FEE"])
@@ -166,11 +165,9 @@ class Ticket:
         total_fee = base_fee_avg + extra_fee
         return int(round(total_fee , -2))
 
-
-    @staticmethod
-    def print_booked_info(t_num):
+    def print_booked_info(self, t_num):
         # 1. 티켓 정보 불러오기
-        data = Ticket.get_ticket(t_num)
+        data = self.get_ticket(t_num)[t_num]
 
         # 2. 필요한 데이터 꺼내기
         train_ids = data["train_ids"]          # 탑승 열차 번호 리스트
@@ -178,7 +175,7 @@ class Ticket:
         seats = data["booked_seats"]           # 좌석 번호 리스트
 
         # 3. 운임 계산
-        fee = Ticket.calc_fee(data)
+        fee = self.calc_fee(data)
 
         # 4. 각 열차의 정차 시간 불러오기
         times = []
