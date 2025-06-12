@@ -78,7 +78,7 @@ class BookTrain:
 
                             if gn:
                                 route = 14
-                            if ja:
+                            elif ja:
                                 route = 15
                             else:
                                 route = 17
@@ -89,6 +89,8 @@ class BookTrain:
                             if minute < 0:
                                 minute += 60
                                 hour -= 1
+                            if hour < 0:
+                                hour += 24
                             print(f"{total_fee} / 소요시간 : {hour}시간 {minute}분")
                             print(f"티켓 번호 : {ticket_id}")
                         print("------------------------------------")
@@ -182,6 +184,8 @@ class BookTrain:
                                 if minute < 0:
                                     minute += 60
                                     hour -= 1
+                                if hour < 0:
+                                    hour += 24
                                 print(f"{int(calc_fee)}원 / 소요시간 : {hour}시간 {minute}분")
                                 print(f"티켓 번호: {ticket_id}")
                         print("------------------------------------")
@@ -284,7 +288,7 @@ class BookTrain:
         route_equal = False
         for dp in route_dp:
             for av in route_av:
-                if dp in route_av or av in route_dp:
+                if dp in route_av and av in route_dp:
                     weight = dp[self.depart] - dp[self.arrive]
                     route_equal = True
                     break
