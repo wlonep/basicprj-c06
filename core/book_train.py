@@ -130,23 +130,28 @@ class BookTrain:
 
                                 if gn:
                                     route1 = 14
-                                if ja:
+                                elif ja:
                                     route1 = 15
                                 else:
                                     route1 = 17
 
-                                gn = all(item in formatgn for item in self.select_train[1]['STATION'])
-                                ja = all(item in formatja for item in self.select_train[1]['STATION'])
+                                gn1 = all(item in formatgn for item in self.select_train[1]['STATION'])
+                                ja1 = all(item in formatja for item in self.select_train[1]['STATION'])
 
-                                if gn:
+                                if gn1:
                                     route2 = 14
-                                if ja:
+                                elif ja1:
                                     route2 = 15
                                 else:
                                     route2 = 17
 
-                                calc_fee = (self.select_train[0]['BASE_FEE'] + self.select_train[1]['BASE_FEE']) / 2
-                                calc_fee += (self.select_train[0]['FEE'] - self.select_train[0]['BASE_FEE']) * (trb_idx - dt_index) / route1 + (self.select_train[1]['FEE'] - self.select_train[1]['BASE_FEE']) * (at_index - tra_idx) / route2
+                                base_fee1 = self.select_train[0]['BASE_FEE']
+                                base_fee2 = self.select_train[1]['BASE_FEE']
+                                fee1 = self.select_train[0]['FEE']
+                                fee2 = self.select_train[1]['FEE']
+                                calc_fee = (base_fee1 + base_fee2) / 2 + (fee1 - base_fee1) * (
+                                            trb_idx - dt_index) / route1 + (fee2 - base_fee2) * (
+                                                      at_index - tra_idx) / route2
 
                                 hour = int(arr_time[:2]) - int(dep_time[:2])
                                 minute = int(arr_time[2:]) - int(dep_time[2:])
@@ -497,14 +502,14 @@ class BookTrain:
                 else:
                     route1 = 17
 
-                is_gangneung = all(item in formatgn for item in stations2)
-                is_jungang = all(item in formatja for item in stations2)
-                is_gyeongbu = all(item in formatgb for item in stations2)
+                is_gangneung1 = all(item in formatgn for item in stations2)
+                is_jungang1 = all(item in formatja for item in stations2)
+                is_gyeongbu1 = all(item in formatgb for item in stations2)
 
                 route2 = 0
-                if is_gangneung:
+                if is_gangneung1:
                     route2 = 14
-                elif is_jungang:
+                elif is_jungang1:
                     route2 = 15
                 else:           #elif is_gyeongbu
                     route2 = 17
