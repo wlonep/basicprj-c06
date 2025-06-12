@@ -381,7 +381,10 @@ class BookTrain:
                 dep_time = tr['STOP_TIME'][dep_index]
                 format_dep = f"{dep_time[:2]}:{dep_time[2:]}"
                 arr_time = tr['STOP_TIME'][arr_index]
-                format_arr = f"{arr_time[:2]}:{arr_time[2:]}"
+                if arr_time[:2] < dep_time[:2]:
+                    format_arr = f"{int(arr_time[:2])+24}:{arr_time[2:]}"
+                else:
+                    format_arr = f"{arr_time[:2]}:{arr_time[2:]}"
                 time = f"{format_dep} → {format_arr}"
 
                 seat = f"남은좌석 : {20 - len(tr['BOOKED'])}석"
@@ -417,9 +420,12 @@ class BookTrain:
                 minute = int(dep_time[2:])
                 taken_dep = hour * 60 + minute
 
-                hour = int(arr_time[:2])
-                minute = int(arr_time[2:])
-                taken_arr = hour * 60 + minute
+                hour2 = int(arr_time[:2])
+                minute2 = int(arr_time[2:])
+                if hour2 < hour:
+                    hour2 += 24
+
+                taken_arr = hour2 * 60 + minute2
 
                 time_taken = taken_arr - taken_dep
 
@@ -464,7 +470,10 @@ class BookTrain:
                 tr1_time = route[0]['STOP_TIME'][tr_index1]
                 format_tr1 = f"{tr1_time[:2]}:{tr1_time[2:]}"
                 arr_time = route[1]['STOP_TIME'][arr_index]
-                format_arr = f"{arr_time[:2]}:{arr_time[2:]}"
+                if arr_time[:2] < dep_time[:2]:
+                    format_arr = f"{int(arr_time[:2]) + 24}:{arr_time[2:]}"
+                else:
+                    format_arr = f"{arr_time[:2]}:{arr_time[2:]}"
                 tr2_time = route[1]['STOP_TIME'][tr_index2]
                 format_tr2 = f"{tr2_time[:2]}:{tr2_time[2:]}"
                 time = f"{format_dep} → {format_tr1} / {format_tr2} → {format_arr}"
@@ -519,9 +528,12 @@ class BookTrain:
                 minute = int(dep_time[2:])
                 taken_dep = hour * 60 + minute
 
-                hour = int(arr_time[:2])
-                minute = int(arr_time[2:])
-                taken_arr = hour * 60 + minute
+                hour2 = int(arr_time[:2])
+                minute2 = int(arr_time[2:])
+                if hour2 < hour:
+                    hour2 += 24
+
+                taken_arr = hour2 * 60 + minute2
 
                 time_taken = taken_arr - taken_dep
 
