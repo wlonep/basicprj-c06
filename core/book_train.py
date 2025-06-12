@@ -123,7 +123,7 @@ class BookTrain:
                                 "booked_seats": [int(self.book_seats[0]), int(self.book_seats[1])]
                             }
 
-                            is_ticketed = ticket.book_ticket("test", ticket_id, ticket_dict)
+                            is_ticketed = ticket.book_ticket(self.user_id, ticket_id, ticket_dict)
                             if is_ticketed:
                                 ticket_data = ticket.get_ticket(ticket_id)
                                 print(ticket_data)
