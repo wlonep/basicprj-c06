@@ -122,8 +122,8 @@ class BookTrain:
                                               int(self.select_train[1]['TRAIN_ID'])],
                                 "booked_seats": [int(self.book_seats[0]), int(self.book_seats[1])]
                             }
-
                             is_ticketed = ticket.book_ticket(self.user_id, ticket_id, ticket_dict)
+
                             if is_ticketed:
                                 ticket_data = ticket.get_ticket(ticket_id)
                                 print(ticket_data)
@@ -190,56 +190,6 @@ class BookTrain:
                 print("\033[31m" + "*잘못된 입력입니다. 올바른 좌석을 선택해주세요." + "\033[0m")
                 self.print_seats(self.select_train)
 
-        # while True:
-        #     tn = input("선택하실 열차 번호를 입력해주세요: ")
-        #
-        #     if re.fullmatch(r"[1-9][0-9]*", tn):
-        #         pass
-        #     else:
-        #         print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해 주세요." + "\033[0m")
-        #         continue
-        #     fl = False
-        #
-        #     if int(tn) in list(self.user.user_data["booked_list"].keys()):
-        #         print("\033[31m" + "* 이미 동일한 열차의 좌석을 예매하였습니다. 다시 입력해주세요." + "\033[0m")
-        #         continue
-        #
-        #     for t in self.train_data:
-        #         if int(tn) == t["TRAIN_ID"]:
-        #             fl = True
-        #     if fl:
-        #         break
-        #     else:
-        #         print("\033[31m" + "*예매 가능한 열차가 아닙니다. 다시 입력해주세요." + "\033[0m")
-        #
-        # while True:
-        #     seat = 1
-        #     for t in self.train_data:
-        #         if int(tn) == t["TRAIN_ID"]:
-        #             print("====================")
-        #             self.print_train(t)
-        #             print("====================")
-        #             idx = 1
-        #             for s in t["BOOKED"]:
-        #                 if int(s) != idx:
-        #                     seat = idx
-        #                     break
-        #                 else:
-        #                     idx += 1
-        #             else:
-        #                 seat = idx
-        #
-        #     choose = input("해당 열차로 예매를 진행하시겠습니까? ( 예 y / 아니오 n): ")
-        #     if choose == 'y':
-        #         self.train.book_seats(int(tn), seat)
-        #         self.user.add_booking(int(tn), self.depart[:-1], self.arrive[:-1], seat)
-        #         print("예매가 완료되었습니다. 메뉴로 돌아갑니다.")
-        #         return
-        #     elif choose == 'n':
-        #         print("에매가 취소되었습니다. 메뉴로 돌아갑니다.")
-        #         return
-        #     else:
-        #         print("\033[31m" + "*잘못된 입력 형식입니다. 다시 입력해 주세요." + "\033[0m")
 
     def __get_train_list(self):
         print("[열차 예매]")
@@ -583,6 +533,7 @@ class BookTrain:
             """
             if self.flag == 1:
                 print("*좌석을 선택합니다.")
+                print(self.count-1)
                 print(f"[KTX-{t[self.count - 1]['TRAIN_ID']} 자리 현황]")
                 number = 1
                 for r in range(5):
@@ -604,7 +555,15 @@ class BookTrain:
                     # 마지막 하단 선
                 print("+----" * 4 + "+")
                 self.flag += 1
-            self.book_seats.append(input("좌석을 선택해 주세요: "))
+            if self.count == 1:
+                if len(self.book_seats) == 1:
+                    self.book_seats.clear()
+                self.book_seats.append(input("좌석을 선택해 주세요: "))
+            else:
+                """count==2"""
+                if len(self.book_seats) == 2:
+                    self.book_seats.pop()
+                self.book_seats.append(input("좌석을 선택해 주세요: "))
         else:
             """
             환승 x
@@ -620,7 +579,7 @@ class BookTrain:
                     # 숫자 라인
                     for c in range(4):
                         if number <= 20:
-                            if number in t['BOOKED']:
+                            if str(number) in t['BOOKED']:
                                 print("|  X ", end="")  # 예약된 좌석 → X 표시
                             else:
                                 print(f"| {number:2} ", end="")  # 예약 안 된 좌석
@@ -632,10 +591,13 @@ class BookTrain:
                     # 마지막 하단 선
                 print("+----" * 4 + "+")
                 self.flag += 1
+            if len(self.book_seats) > 0:
+                self.book_seats.clear()
             self.book_seats.append(input("좌석을 선택해 주세요: "))
 
     def print_menu(self):
         print(self.train_data)
+        self.count = 1
         if len(self.train_data) == 0:
             print("\033[31m" + "* 해당 출발지에서 도착지로 가는 모든 열차의 좌석이 매진되었습니다. 메뉴로 돌아갑니다." + "\033[0m")
             return
@@ -646,10 +608,12 @@ class BookTrain:
         # self.reserve_ticket()
 
         self.print_train(self.train_data)
+        self.isReserved = False
         while True:
             self.reserve_ticket(self.select_train)
             if self.isReserved:
                 break
+        self.isReserved = False
         if len(self.transfers) != 0:
             while True:
                 self.flag = 1
