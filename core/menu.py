@@ -136,8 +136,7 @@ def main_menu():
 
 def check_by_ticket(t_id: str):
     try:
-        ticket = Ticket()  # 티켓 파일 존재여부 판단
-        ticket.print_booked_info(t_id)
+        Ticket(t_id).print_booked_info(t_id)
         return True
     except FileNotFoundError:
         print("\033[31m*티켓 번호가 존재하지 않습니다. 다시 입력해주세요.\033[0m")
