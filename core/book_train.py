@@ -560,7 +560,7 @@ class BookTrain:
 
             number = int(sta_num)
             if number > idx or number == 0:
-                print("*잘못된 입력 형식입니다. 다시 입력해주세요.")
+                print("\033[31m" + "*예매 가능한 열차가 아닙니다. 다시 입력해주세요." + "\033[0m")
                 continue
             break
 
