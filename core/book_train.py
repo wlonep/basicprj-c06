@@ -87,7 +87,7 @@ class BookTrain:
                                 minute += 60
                                 hour -= 1
 
-                            print(f"{total_fee} / 소요시간 : {hour}시간 {minute}분")
+                            print(f"비용 : {total_fee} / 소요시간 : {hour}시간 {minute}분")
                             print(f"티켓 번호 : {ticket_id}")
                         print("------------------------------------")
             else:
@@ -115,7 +115,7 @@ class BookTrain:
                             ticket_id = ticket.create_ticket_id()
 
                             ticket_dict = {
-                                "stations": [self.depart, self.transfers[self.index - 2], self.arrive],
+                                "stations": [self.depart[:-1], self.transfers[self.index - 2][:-1], self.arrive[:-1]],
                                 "train_ids": [int(self.select_train[0]['TRAIN_ID']),
                                               int(self.select_train[1]['TRAIN_ID'])],
                                 "booked_seats": [int(self.book_seats[0]), int(self.book_seats[1])]
@@ -127,10 +127,10 @@ class BookTrain:
                                 trans = ticket_data[ticket_id]['stations'][1]
                                 print(
                                     f"[KTX-{ticket_data[ticket_id]['train_ids'][0]} -> KTX-{ticket_data[ticket_id]['train_ids'][1]}]")
-                                print(f"{self.depart[:-1]} -> {trans[:-1]} -> {self.arrive[:-1]}")
+                                print(f"{self.depart[:-1]} -> {trans} -> {self.arrive[:-1]}")
                                 dt_index = self.select_train[0]['STATION'].index(self.depart)
-                                trb_idx = self.select_train[0]['STATION'].index(trans)
-                                tra_idx = self.select_train[1]['STATION'].index(trans)
+                                trb_idx = self.select_train[0]['STATION'].index(trans+"역")
+                                tra_idx = self.select_train[1]['STATION'].index(trans+"역")
                                 at_index = self.select_train[1]['STATION'].index(self.arrive)
                                 dep_time = self.select_train[0]['STOP_TIME'][dt_index]
                                 tr_off_time = self.select_train[0]['STOP_TIME'][trb_idx]
@@ -179,7 +179,7 @@ class BookTrain:
                                 if minute < 0:
                                     minute += 60
                                     hour -= 1
-                                print(f"{int(calc_fee)}원 / 소요시간 : {hour}시간 {minute}분")
+                                print(f"비용 : {int(calc_fee)}원 / 소요시간 : {hour}시간 {minute}분")
                                 print(f"티켓 번호: {ticket_id}")
                         print("------------------------------------")
                         self.count += 1
@@ -528,7 +528,6 @@ class BookTrain:
             """
             if self.flag == 1:
                 print("*좌석을 선택합니다.")
-                print(self.count-1)
                 print(f"[KTX-{t[self.count - 1]['TRAIN_ID']} 자리 현황]")
                 number = 1
                 for r in range(5):
@@ -538,7 +537,7 @@ class BookTrain:
                     # 숫자 라인
                     for c in range(4):
                         if number <= 20:
-                            if number in t[self.count - 1]['BOOKED']:
+                            if str(number) in t[self.count - 1]['BOOKED']:
                                 print("|  X ", end="")  # 예약된 좌석 → X 표시
                             else:
                                 print(f"| {number:2} ", end="")  # 예약 안 된 좌석
