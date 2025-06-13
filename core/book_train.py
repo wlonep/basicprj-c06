@@ -81,8 +81,12 @@ class BookTrain:
                                 route = 17
 
                             total_fee = f"비용 : {int(self.select_train['BASE_FEE'] + (self.select_train['FEE'] - self.select_train['BASE_FEE']) * (at_index - dt_index) / route)}원"
-                            hour = int(arr_time[:2]) - int(dep_time[:2])
-                            minute = int(arr_time[2:]) - int(dep_time[2:])
+                            ar_hour = int(arr_time[:2])
+                            dp_hour = int(dep_time[:2])
+                            ar_minute = int(arr_time[2:])
+                            dp_minute = int(dep_time[2:])
+                            hour = ar_hour - dp_hour
+                            minute = ar_minute - dp_minute
                             if minute < 0:
                                 minute += 60
                                 hour -= 1
@@ -174,11 +178,16 @@ class BookTrain:
                                         trb_idx - dt_index) / route1 + (fee2 - base_fee2) * (
                                                    at_index - tra_idx) / route2
 
-                                hour = int(arr_time[:2]) - int(dep_time[:2])
-                                minute = int(arr_time[2:]) - int(dep_time[2:])
+                                ar_hour = int(arr_time[:2])
+                                dp_hour = int(dep_time[:2])
+                                ar_minute = int(arr_time[2:])
+                                dp_minute = int(dep_time[2:])
+                                hour = ar_hour - dp_hour
+                                minute = ar_minute - dp_minute
                                 if minute < 0:
                                     minute += 60
                                     hour -= 1
+
                                 print(f"{int(calc_fee)}원 / 소요시간 : {hour}시간 {minute}분")
                                 print(f"티켓 번호: {ticket_id}")
                         print("------------------------------------")
@@ -214,75 +223,79 @@ class BookTrain:
             print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
 
         while True:
-            self.arrive = input("도착지: ")
-            if self.arrive[-1] != "역":
-                self.arrive += "역"
+            while True:
+                self.arrive = input("도착지: ")
+                if self.arrive[-1] != "역":
+                    self.arrive += "역"
 
-            found = False
-            for st in station_list:
-                if self.arrive in st:
-                    route_av.append(st)
-                    found = True
+                found = False
+                for st in station_list:
+                    if self.arrive in st:
+                        route_av.append(st)
+                        found = True
 
-            if found:
-                break
-            print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
-
-        route_equal = False
-        for dp in route_dp:
-            for av in route_av:
-                if dp in route_av and av in route_dp:
-                    weight = dp[self.depart] - dp[self.arrive]
-                    route_equal = True
+                if found:
                     break
-            if route_equal:
-                break
+                print("\033[31m" + "* 일치하는 역이 존재하지 않습니다. 다시 입력해주세요." + "\033[0m")
 
-        dtt_list = []
-        tta_list = []
-
-        if not route_equal:
+            route_equal = False
             for dp in route_dp:
                 for av in route_av:
-                    common = [station for station in dp if station in av]
-                    self.transfer_stations.extend(common)
+                    if dp in route_av and av in route_dp:
+                        weight = dp[self.depart] - dp[self.arrive]
+                        route_equal = True
+                        break
+                if route_equal:
+                    break
 
-            for ts in self.transfer_stations:
-                for pr in route_dp:
-                    if ts in pr:
-                        weight = pr[self.depart] - pr[ts]
-                        if weight < 0:
-                            way = "downward"
-                        elif weight > 0:
-                            way = "upward"
+            dtt_list = []
+            tta_list = []
 
-                        train_prev = Train(way)
-                        dtt_list = train_prev.get_train_data(self.depart, ts)
+            if not route_equal:
+                for dp in route_dp:
+                    for av in route_av:
+                        common = [station for station in dp if station in av]
+                        self.transfer_stations.extend(common)
 
-                for ar in route_av:
-                    if ts in ar:
-                        weight = ar[ts] - ar[self.arrive]
-                        if weight < 0:
-                            way = "downward"
-                        elif weight > 0:
-                            way = "upward"
+                for ts in self.transfer_stations:
+                    for pr in route_dp:
+                        if ts in pr:
+                            weight = pr[self.depart] - pr[ts]
+                            if weight < 0:
+                                way = "downward"
+                            elif weight > 0:
+                                way = "upward"
 
-                        train_after = Train(way)
-                        tta_list = train_after.get_train_data(ts, self.arrive)
+                            train_prev = Train(way)
+                            dtt_list = train_prev.get_train_data(self.depart, ts)
 
-        if self.transfer_stations:
-            self.train_data = self.transfer_train_list(dtt_list, tta_list)
+                    for ar in route_av:
+                        if ts in ar:
+                            weight = ar[ts] - ar[self.arrive]
+                            if weight < 0:
+                                way = "downward"
+                            elif weight > 0:
+                                way = "upward"
 
-        if not self.transfer_stations:
-            if weight < 0:
-                way = "downward"
-            elif weight > 0:
-                way = "upward"
-            else:
-                print("\033[31m" + "* 출발지와 도착지가 같습니다. 다시 입력해주세요." + "\033[0m")
+                            train_after = Train(way)
+                            tta_list = train_after.get_train_data(ts, self.arrive)
 
-            self.train = Train(way)
-            self.train_data = self.train.get_train_data(self.depart, self.arrive)
+            if self.transfer_stations:
+                self.train_data = self.transfer_train_list(dtt_list, tta_list)
+                break
+
+            if not self.transfer_stations:
+                if weight < 0:
+                    way = "downward"
+                elif weight > 0:
+                    way = "upward"
+                else:
+                    print("\033[31m" + "* 출발지와 도착지가 같습니다. 다시 입력해주세요." + "\033[0m")
+                    continue
+
+                self.train = Train(way)
+                self.train_data = self.train.get_train_data(self.depart, self.arrive)
+                break
 
     def transfer_train_list(self, dtt_list: list, tta_list: list) -> list:
         dta_list = []
