@@ -119,8 +119,8 @@ def main_menu():
 
         elif sel in ["3", "비회원조회", "비회원 조회"]:
 
-            print("[비회원 조회]")
             while True:
+                print("[비회원 조회]")
                 t_id = input("티켓 번호를 입력하세요: ")
                 if check_by_ticket(t_id):
                     break  # 조회 성공했을 때만 종료
@@ -131,13 +131,26 @@ def main_menu():
             break
 
         else:
-            print("*잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요.")
+            print("\033[31m*잘못된 입력입니다. 올바른 메뉴의 숫자 또는 단어를 입력하세요.\033[0m")
 
 
 def check_by_ticket(t_id: str):
     try:
-        Ticket(t_id).print_booked_info(t_id)
-        return True
+        ticket = Ticket(t_id)  # 티켓 정보 로드
+        ticket.print_booked_info(t_id)  # 상세 정보 출력
+
+        # 시작화면 복귀 여부 묻기
+        while True:
+            back = input(
+                "시작화면으로 돌아가시겠습니까? ( 예 y / 아니오 n ) : "
+            ).strip().lower()
+
+            if back in ("y"):
+                return True  # main_menu 로 복귀
+            elif back in ("n"):
+                return False  # 티켓 번호 재입력
+            else:
+                print("\033[31m*잘못된 입력입니다. 다시 입력해주세요.\033[0m")
     except FileNotFoundError:
         print("\033[31m*티켓 번호가 존재하지 않습니다. 다시 입력해주세요.\033[0m")
         return False
