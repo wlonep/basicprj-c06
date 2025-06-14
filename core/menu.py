@@ -119,8 +119,8 @@ def main_menu():
 
         elif sel in ["3", "비회원조회", "비회원 조회"]:
 
+            print("[비회원 조회]")
             while True:
-                print("[비회원 조회]")
                 t_id = input("티켓 번호를 입력하세요: ")
                 if check_by_ticket(t_id):
                     break  # 조회 성공했을 때만 종료
