@@ -423,13 +423,13 @@ class BookTrain:
             break
 
         if len(self.transfers) == 0:
-            print(t[number - 1])
+            #print(t[number - 1])
             self.select_train = t[number - 1]
             self.print_seats(self.select_train)
         else:
             for item in t:
                 if number in item:
-                    print(item[number])
+                    #print(item[number])
                     self.select_train = item[number]
                     self.print_seats(self.select_train)
         return
