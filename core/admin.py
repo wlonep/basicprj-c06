@@ -97,9 +97,8 @@ class Admin:
             station_list = [s.strip() for s in stations_input.split(",") if s.strip()]
             way = "upward" if int(tid) % 2 == 0 else "downward"
             stop_times = self.get_input("STOP_TIME: ", self.validate_stop_times_input, station_list, way)
-            fee = self.get_input("FEE: ", self.validate_fee)
             while True:
-                # FEE 입력 받기
+                fee = self.get_input("FEE: ", self.validate_fee)
                 base_fee = None  # 예외 대비 초기화
                 base_fee_input = input("BASE_FEE: ")
 
@@ -165,7 +164,7 @@ class Admin:
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
         # 2. 쉼표 이외의 구분자가 있으면 잘못된 형식
-        if re.search(r'[^가-힣,]', user_input):  # 한글과 쉼표 외의 다른 문자
+        if re.search(r'[^가-힣,역]', user_input):  # 한글과 쉼표 외의 다른 문자
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
         # 3. 쉼표가 없으면 오류
@@ -177,19 +176,21 @@ class Admin:
         if '' in stations or len(stations) < 2:
             raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
+        stripped_stations = [s.strip().removesuffix("역") for s in stations]
+
         # 5. 존재하지 않는 역 이름이 있는지 확인
         all_valid_stations = set()
         for route_stations in self.valid_station_dict.values():
             all_valid_stations.update(route_stations)
 
-        for st in stations:
+        for st in stripped_stations:
             if st not in all_valid_stations:
                 raise ValueError("*존재하지 않는 역 이름이 포함되어있습니다. 다시 입력해주세요.")
 
         # 6. 모든 역이 동일한 노선에 속하는지 확인
         matched_route = None
         for route_name, route_stations in self.valid_station_dict.items():
-            if all(st in route_stations for st in stations):
+            if all(st in route_stations for st in stripped_stations):
                 matched_route = route_stations
                 break
 
@@ -197,7 +198,7 @@ class Admin:
             raise ValueError("*입력된 역들이 서로 다른 노선에 속해있습니다. 다시 입력해주세요.")
 
         # 6. 입력된 역이 노선 내에서 오름차순 또는 내림차순이어야 함
-        weights = [matched_route.index(st) for st in stations]
+        weights = [matched_route.index(st) for st in stripped_stations]
         ascending = weights == sorted(weights)
         descending = weights == sorted(weights, reverse=True)
 
@@ -210,7 +211,7 @@ class Admin:
         if descending and int(tid) % 2 != 0:
             raise ValueError("*입력한 열차 고유 번호는 하행이고 입력한 역 목록은 상행입니다. 다시 입력해주세요.")
 
-        return user_input
+        return ",".join(stripped_stations)
 
     @staticmethod
     def validate_fee(user_input):
@@ -238,22 +239,39 @@ class Admin:
             if not re.fullmatch(r'\d{4}', st):
                 raise ValueError("*잘못된 입력 형식입니다. 다시 입력해주세요.")
 
-        # 2. 시간 순서 검사
-        for i in range(1, len(stop_times)):
-            if int(stop_times[i]) <= int(stop_times[i - 1]):
-                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
 
-        # 3. 시간 규칙 검사
-        for t in stop_times:
-            hour = int(t[:2])
-            minute = int(t[2:])
-            if not (0 <= hour < 24) or not (0 <= minute < 60):
-                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
-
-        # 4. 정차역 간 최소 5분 이상 차이 검사
+        # 2. 시간 형식 및 첫 정차 시각 검사
         def to_minutes(tm):
             return int(tm[:2]) * 60 + int(tm[2:])
 
+        # 첫 시간 확인
+        first_time = int(stop_times[0])
+        if first_time >= 2400:
+            raise ValueError("*첫 정차시간은 24:00 미만 이여야 합니다. 다시 입력해주세요.")
+
+        has_crossed_midnight = False
+        for i, t in enumerate(stop_times):
+            hour = int(t[:2])
+            minute = int(t[2:])
+            time_int = int(t)
+
+            if not (0 <= minute < 60):
+                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+
+            if 2400 <= time_int <= 2600:
+                has_crossed_midnight = True
+            elif 0 <= time_int <= 2359:
+                if has_crossed_midnight:
+                    raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+            else:
+                raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+
+        # 3. 시간 순서 검사
+        for i in range(1, len(stop_times)):
+             if int(stop_times[i]) <= int(stop_times[i - 1]):
+                 raise ValueError("*잘못된 시간 입력입니다. 다시 입력해주세요.")
+
+        # 4. 정차역 간 최소 5분 이상 차이 검사
         for i in range(1, len(stop_times)):
             prev = to_minutes(stop_times[i - 1])
             curr = to_minutes(stop_times[i])
@@ -261,9 +279,6 @@ class Admin:
                 raise ValueError("*역 간 이동에는 최소 5분 이상이 걸립니다. 다시 입력해주세요.")
 
         # 5. ±3분 이내 정차 충돌 검사
-        def to_minutes(tm):
-            return int(tm[:2]) * 60 + int(tm[2:])
-
         existing_trains = Train(way)
         for station, new_time_str in zip(station_list, stop_times):
             new_time = to_minutes(new_time_str)
